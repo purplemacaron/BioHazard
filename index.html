@@ -3,260 +3,266 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>면역 서바이벌</title>
+<title>IMMUNE ZERO · 면역 서바이벌</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
 <style>
-/* Layout: 화이트 모드. 메인은 좌측 흰 패널(내용) + 우측 실시간 자동 시연 스테이지.
-   인게임 HUD는 얇은 선의 흰 카드. 본고딕(Noto Sans KR) 단일 서체, 수치는 tabular-nums.
-   잉크 블랙이 기본 액션 색, 파랑은 면역(아군), 초록 · 주황 · 빨강은 병원체 위험도. */
+/* Layout: 시네마틱 다크. 타이틀 = 좌측 로고·메뉴 리스트 + 우측 대형 면역세포 연출(캔버스).
+   인게임 HUD = 모서리를 깎은 어두운 패널 + 심전도(ECG) 체력. 본고딕(Noto Sans KR) 단일 서체.
+   포인트는 경고 레드, 면역은 시안, 병원체 위험도는 초록 · 앰버 · 빨강. */
 :root{
-  --bg:#ffffff; --bg2:#f5f6f8; --bg3:#eceef2; --line:#e3e6eb; --line2:#cdd2da;
-  --ink:#0e1218; --ink2:#454d5a; --mut:#8a929e;
-  --blue:#2f6fed; --blue-d:#1f55c8;
-  --t0:#1fa35a; --t1:#f08a00; --t2:#e5384a; --pink:#ff5a78; --yellow:#f5b400; --violet:#7a5af8;
-  --shadow:0 1px 2px rgba(14,18,24,.06),0 6px 20px rgba(14,18,24,.08);
-  --shadow-l:0 2px 4px rgba(14,18,24,.08),0 18px 48px rgba(14,18,24,.16);
-  --r:6px;
+  --bg:#03060a; --blk:rgba(7,11,16,.88); --blk2:#0c1218; --line:rgba(255,255,255,.12); --line2:rgba(255,255,255,.24);
+  --tx:#eef3f8; --tx2:#b7c3d0; --mut:#7f8d9c;
+  --red:#e03131; --red2:#ff5252; --amber:#f5b400; --green:#42e06f; --cyan:#7fe8ff; --blue:#4a9bff; --violet:#9a82ff; --pink:#ff6b8a;
+  --t0:#7ddc3a; --t1:#ffa81f; --t2:#ff4a4a;
+  --cut:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));
   --font:"Noto Sans KR","Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif;
-  color-scheme:light;
+  color-scheme:dark;
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-html,body{height:100%;margin:0;overflow:hidden;background:var(--bg2);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
-#app{position:fixed;inset:0;background:var(--bg2)}
+html,body{height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--tx);font-family:var(--font);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+#app{position:fixed;inset:0;background:var(--bg)}
 #cv{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
 button{font:inherit;color:inherit}
 h1,h2,h3,h4,p,dl,dd{margin:0}
 svg.ic{width:100%;height:100%;display:block;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.ibadge{--c:var(--blue);flex:none;width:40px;height:40px;padding:9px;border-radius:var(--r);background:var(--c);color:#fff}
+.ibadge{--c:var(--cyan);flex:none;width:40px;height:40px;padding:9px;background:var(--c);color:#04090d;clip-path:var(--cut)}
+.cap{font:700 10px/1 var(--font);letter-spacing:.2em;text-transform:uppercase;color:var(--mut)}
 
 /* ---------- 공통 ---------- */
-.panel{background:var(--bg);color:var(--ink);border-radius:10px;border:1px solid var(--line);box-shadow:var(--shadow-l)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:var(--r);border:1px solid var(--line2);background:var(--bg);color:var(--ink);font:700 14px/1 var(--font);letter-spacing:-.005em;cursor:pointer;transition:background .12s,border-color .12s,color .12s}
-.btn:hover{background:var(--bg2);border-color:var(--ink)}
-.btn:disabled{opacity:.4;cursor:not-allowed}
-.btn.primary{background:var(--ink);border-color:var(--ink);color:#fff;font-weight:900}
-.btn.primary:hover{background:#262d38}
+.panel{background:#0a1016;color:var(--tx);box-shadow:inset 0 0 0 1px var(--line),0 40px 90px rgba(0,0,0,.75);clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px))}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 20px;border:0;background:#121a22;color:var(--tx);font:700 14px/1 var(--font);letter-spacing:-.005em;cursor:pointer;box-shadow:inset 0 0 0 1px var(--line);clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));transition:background .12s,box-shadow .12s}
+.btn:hover{background:#1a2530;box-shadow:inset 0 0 0 1px var(--line2)}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn.primary{background:var(--red);color:#fff;font-weight:900;box-shadow:none}
+.btn.primary:hover{background:var(--red2)}
 .btn.lg{min-height:54px;padding:0 30px;font-size:16px}
-.btn.cyan,.btn.green{background:var(--bg)}
-.btn.pink{color:#c52a3c}.btn.pink:hover{background:#fff1f3;border-color:#e58a96}
+.btn.pink{color:#ff8f8f}.btn.pink:hover{background:#2a1214}
 .btn svg{width:16px;height:16px;flex:none}
-.btn:focus-visible,.iconbtn:focus-visible,.cellbtn:focus-visible,.card:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-.iconbtn{flex:none;pointer-events:auto;width:40px;height:40px;padding:10px;border-radius:var(--r);border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer;box-shadow:var(--shadow)}
-.iconbtn:hover{border-color:var(--ink)}
-.tag{display:inline-flex;align-items:center;padding:4px 8px;border-radius:4px;background:color-mix(in srgb,var(--c,var(--blue)) 12%,#fff);color:color-mix(in srgb,var(--c,var(--blue)) 78%,#0e1218);font:700 11px/1 var(--font)}
+.btn:focus-visible,.iconbtn:focus-visible,.cellbtn:focus-visible,.card:focus-visible,.mi:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.iconbtn{flex:none;pointer-events:auto;width:40px;height:40px;padding:10px;border:0;background:var(--blk);color:var(--tx);cursor:pointer;box-shadow:inset 0 0 0 1px var(--line);clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px))}
+.iconbtn:hover{box-shadow:inset 0 0 0 1px var(--cyan)}
+.tag{display:inline-flex;align-items:center;padding:4px 8px;background:color-mix(in srgb,var(--c,var(--cyan)) 18%,#0a1016);color:color-mix(in srgb,var(--c,var(--cyan)) 80%,#fff);font:700 11px/1 var(--font);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c,var(--cyan)) 40%,transparent)}
 
 /* ---------- HUD ---------- */
 #hud{position:absolute;inset:0;pointer-events:none}
-.blk{background:var(--bg);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
-#xpbar{position:absolute;top:0;left:0;right:0;height:5px;background:rgba(14,18,24,.1)}
-.xptrack{position:absolute;inset:0;z-index:1;background:repeating-linear-gradient(90deg,transparent 0 calc(5% - 1px),rgba(255,255,255,.9) calc(5% - 1px) 5%)}
-#xpfill{display:block;height:100%;width:100%;transform-origin:left center;transform:scaleX(0);background:var(--blue)}
+.blk{background:var(--blk);box-shadow:inset 0 0 0 1px var(--line);clip-path:var(--cut)}
+#xpbar{position:absolute;top:0;left:0;right:0;height:5px;background:rgba(255,255,255,.08)}
+.xptrack{position:absolute;inset:0;z-index:1;background:repeating-linear-gradient(90deg,transparent 0 calc(5% - 1px),rgba(3,6,10,.95) calc(5% - 1px) 5%)}
+#xpfill{display:block;height:100%;width:100%;transform-origin:left center;transform:scaleX(0);background:linear-gradient(90deg,#2a6fd6,var(--cyan));box-shadow:0 0 12px rgba(127,232,255,.6)}
 .hud-top{position:absolute;top:18px;left:0;right:0;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:0 max(18px,env(safe-area-inset-right)) 0 max(18px,env(safe-area-inset-left))}
 .hud-top>div{min-width:0}
 .hud-l{flex:1 1 0;display:flex;flex-direction:column;gap:8px}
 .lvrow{display:flex;align-items:stretch;gap:8px}
-.lvb{flex:none;width:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:var(--r);background:var(--ink);color:#fff;line-height:1;box-shadow:var(--shadow)}
-.lvb small{font:700 9px/1 var(--font);letter-spacing:.1em;color:#aab3c0}
+.lvb{flex:none;width:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:var(--cyan);color:#04090d;line-height:1;clip-path:var(--cut)}
+.lvb small{font:700 9px/1 var(--font);letter-spacing:.1em}
 .lvb b{font:900 20px/1 var(--font);font-variant-numeric:tabular-nums}
-.hp{position:relative;flex:0 1 240px;min-width:130px;padding:8px 10px 9px}
-.hp::before{content:"체력";display:block;font:700 10px/1 var(--font);letter-spacing:.1em;color:var(--mut);margin-bottom:6px}
-.hptrack{position:relative;height:8px;background:var(--bg3);overflow:hidden}
+.vital{flex:0 1 250px;min-width:150px;padding:8px 12px 9px}
+.vt-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px}
+#hpState{font:900 12px/1 var(--font);letter-spacing:.2em;color:var(--green)}
+#hpState.caution{color:var(--amber)}#hpState.danger{color:var(--red2);animation:blink .6s steps(2) infinite}
+#hptxt{font:700 11px/1 var(--font);color:var(--tx2);font-variant-numeric:tabular-nums}
+#ecg{display:block;width:100%;height:42px}
+.hptrack{position:relative;height:3px;background:rgba(255,255,255,.1);margin-top:2px}
 .hptrack i{position:absolute;inset:0;transform-origin:left center;display:block}
-#hpghost{background:#ffc0cb}
-#hpfill{background:var(--pink)}
-.hptrack::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 calc(10% - 1px),#fff calc(10% - 1px) 10%)}
-#hptxt{position:absolute;right:10px;top:8px;font:700 11px/1 var(--font);color:var(--ink);font-variant-numeric:tabular-nums}
+#hpghost{background:rgba(255,255,255,.4)}
+#hpfill{background:var(--green)}
 .slots{display:flex;gap:6px;flex-wrap:wrap;max-width:min(330px,62vw)}
-.slot{--c:var(--blue);position:relative;width:38px;height:38px;padding:9px;border-radius:var(--r);background:var(--bg);border:1px solid var(--line);border-top:3px solid var(--c);color:var(--c);box-shadow:var(--shadow)}
-.slot i{position:absolute;right:-1px;bottom:-1px;min-width:16px;height:16px;padding:0 4px;background:var(--ink);font:900 10px/16px var(--font);font-style:normal;text-align:center;color:#fff;border-radius:3px 0 5px 0}
-.slot.evo{border-color:var(--yellow);box-shadow:0 0 0 1px var(--yellow),var(--shadow);background:#fffbea}
-.slots.small .slot{width:30px;height:30px;padding:6px;border-top-width:2px}
+.slot{--c:var(--cyan);position:relative;width:38px;height:38px;padding:9px;background:var(--blk);color:var(--c);box-shadow:inset 0 0 0 1px var(--line),inset 0 3px 0 var(--c);clip-path:var(--cut)}
+.slot i{position:absolute;right:0;bottom:0;min-width:16px;height:16px;padding:0 4px;background:var(--c);font:900 10px/16px var(--font);font-style:normal;text-align:center;color:#04090d}
+.slot.evo{color:var(--amber);box-shadow:inset 0 0 0 1px var(--amber),inset 0 3px 0 var(--amber),0 0 14px rgba(245,180,0,.4)}
+.slots.small .slot{width:30px;height:30px;padding:6px}
 .slots.small .slot i{min-width:13px;height:13px;font-size:9px;line-height:13px}
 #status{display:flex;gap:6px}
-.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:4px;background:var(--violet);color:#fff;font:700 11px/1 var(--font)}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;background:var(--violet);color:#0a0820;font:700 11px/1 var(--font)}
 .hud-m{flex:none;display:flex;flex-direction:column;align-items:center;gap:6px}
-#timer{padding:7px 22px 8px;font:900 24px/1 var(--font);letter-spacing:.04em;color:var(--ink);font-variant-numeric:tabular-nums;text-align:center}
-#timer small{display:block;font:700 9px/1 var(--font);letter-spacing:.16em;color:var(--mut);margin-bottom:5px}
-#zone{padding:6px 12px;font:700 11px/1 var(--font);color:var(--ink);display:flex;align-items:center;gap:8px}
-#zone::before{content:"";width:8px;height:8px;background:var(--blue)}
+#timer{padding:7px 24px 8px;font:900 24px/1 var(--font);letter-spacing:.06em;color:#fff;font-variant-numeric:tabular-nums;text-align:center}
+#timer small{display:block;font:700 9px/1 var(--font);letter-spacing:.22em;color:var(--mut);margin-bottom:5px}
+#zone{padding:6px 14px;font:700 11px/1 var(--font);color:var(--tx);display:flex;align-items:center;gap:8px}
+#zone::before{content:"";width:8px;height:8px;background:var(--red)}
 #tiers{display:flex;gap:5px}
-.tier{--c:var(--t0);display:flex;align-items:center;gap:7px;padding:3px 10px 3px 4px;border-left:3px solid var(--c);opacity:.45;filter:grayscale(.9);transition:opacity .3s,filter .3s}
+.tier{--c:var(--t0);display:flex;align-items:center;gap:7px;padding:3px 10px 3px 4px;opacity:.38;filter:grayscale(.9);transition:opacity .3s,filter .3s;box-shadow:inset 3px 0 0 var(--c),inset 0 0 0 1px var(--line)}
 .tier.t1{--c:var(--t1)}.tier.t2{--c:var(--t2)}
-.tier canvas{width:24px;height:24px;display:block}
+.tier canvas{width:24px;height:24px;display:block;margin-left:3px}
 .tier b{font:900 14px/1 var(--font);min-width:2ch;text-align:right;font-variant-numeric:tabular-nums}
 .tier.lit{opacity:1;filter:none}
-.nextboss{font:700 11px/1.2 var(--font);color:var(--ink2);text-shadow:0 0 6px #fff,0 0 10px #fff;min-height:12px}
+.nextboss{font:700 11px/1.2 var(--font);color:var(--tx2);text-shadow:0 1px 6px #000;min-height:12px}
 .hud-r{flex:1 1 0;display:flex;align-items:flex-start;justify-content:flex-end;gap:8px}
-.kills{display:flex;align-items:center;gap:10px;height:40px;padding:0 14px 0 12px}
+.kills{display:flex;align-items:center;gap:10px;height:40px;padding:0 16px 0 12px}
 .kills svg{width:16px;height:16px;color:var(--mut)}
 .kills b{font:900 17px/1 var(--font);font-variant-numeric:tabular-nums}
-.kills small{font:700 9px/1 var(--font);color:var(--mut);letter-spacing:.1em}
-#bossbar{width:min(480px,calc(100vw - 36px));margin-top:2px;padding:9px 12px 10px;border-left:3px solid var(--bc,var(--t2))}
-#bossbar .bn{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:7px}
+.kills small{font:700 9px/1 var(--font);color:var(--mut);letter-spacing:.14em}
+#bossbar{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(76px + env(safe-area-inset-bottom,0px));width:min(560px,calc(100vw - 36px));padding:10px 14px 11px;box-shadow:inset 0 0 0 1px var(--line),inset 3px 0 0 var(--bc,var(--t2))}
+#bossbar .bn{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:8px}
 #bossbar b{font:900 15px/1.2 var(--font)}
-#bossbar span{font:700 10px/1 var(--font);letter-spacing:.1em;color:var(--bc,var(--t2))}
-#bossbar .bb{height:6px;background:var(--bg3)}
-#bossfill{display:block;height:100%;width:100%;transform-origin:left center;background:var(--bc,var(--t2))}
+#bossbar span{font:700 10px/1 var(--font);letter-spacing:.18em;color:var(--bc,var(--t2))}
+#bossbar .bb{height:7px;background:rgba(255,255,255,.1)}
+#bossfill{display:block;height:100%;width:100%;transform-origin:left center;background:var(--bc,var(--t2));box-shadow:0 0 10px var(--bc,var(--t2))}
 #vitals{position:absolute;left:max(18px,env(safe-area-inset-left));bottom:calc(18px + env(safe-area-inset-bottom,0px));width:214px;padding:10px 12px 10px}
-#vitals h4{margin:0 0 6px;display:flex;justify-content:space-between;font:700 10px/1 var(--font);letter-spacing:.1em;color:var(--mut)}
-#vitals h4 i{font-style:normal;color:var(--t0)}
+#vitals h4{margin:0 0 6px;display:flex;justify-content:space-between;font:700 10px/1 var(--font);letter-spacing:.18em;color:var(--mut)}
+#vitals h4 i{font-style:normal;color:var(--red2)}
 .vrow{display:grid;grid-template-columns:1fr auto;align-items:baseline;padding:6px 0;border-top:1px solid var(--line)}
-.vrow span{font:500 11px/1 var(--font);color:var(--ink2)}
-.vrow b{font:900 15px/1 var(--font);color:var(--ink);font-variant-numeric:tabular-nums}
+.vrow span{font:500 11px/1 var(--font);color:var(--tx2)}
+.vrow b{font:900 15px/1 var(--font);color:#fff;font-variant-numeric:tabular-nums}
 .vrow b i{font:500 10px/1 var(--font);font-style:normal;color:var(--mut);margin-left:3px}
-.vrow b.warn{color:#d97200}.vrow b.crit{color:var(--t2)}.vrow b.ok{color:var(--t0)}
+.vrow b.warn{color:var(--amber)}.vrow b.crit{color:var(--red2)}.vrow b.ok{color:var(--green)}
 #vitals canvas{display:block;width:100%;height:34px;margin-top:4px}
-#banner{position:absolute;left:50%;top:28%;transform:translate(-50%,-50%);opacity:0;pointer-events:none;width:max-content;max-width:min(640px,calc(100% - 32px));padding:14px 22px 15px;background:var(--bg);border:1px solid var(--line);border-left:5px solid var(--bc,var(--ink));border-radius:var(--r);box-shadow:var(--shadow-l);text-align:left}
-#banner b{display:block;font:900 clamp(20px,3vw,28px)/1.25 var(--font);color:var(--ink);letter-spacing:-.03em}
-#banner span{display:block;margin-top:4px;font:500 14px/1.45 var(--font);color:var(--ink2)}
+#banner{position:absolute;left:50%;top:27%;transform:translate(-50%,-50%);opacity:0;pointer-events:none;width:max-content;max-width:min(640px,calc(100% - 32px));padding:14px 26px 15px;background:var(--blk);box-shadow:inset 0 0 0 1px var(--line),inset 4px 0 0 var(--bc,var(--red));clip-path:var(--cut);text-align:left}
+#banner b{display:block;font:900 clamp(20px,3vw,28px)/1.25 var(--font);letter-spacing:-.03em}
+#banner span{display:block;margin-top:4px;font:500 14px/1.45 var(--font);color:var(--tx2)}
 #banner.show{animation:ban 3s cubic-bezier(.2,.9,.3,1) both}
 @keyframes ban{0%{opacity:0;transform:translate(-50%,-40%)}10%{opacity:1;transform:translate(-50%,-50%)}82%{opacity:1}100%{opacity:0;transform:translate(-50%,-58%)}}
-#warn{position:absolute;left:0;right:0;top:34%;height:104px;opacity:0;pointer-events:none;display:flex;flex-direction:column;justify-content:center;background:rgba(229,56,74,.96)}
-#warn b{display:block;text-align:center;font:900 clamp(24px,4.2vw,40px)/1 var(--font);color:#fff;letter-spacing:.24em;padding-left:.24em;animation:blink .6s steps(2) infinite}
+#warn{position:absolute;left:0;right:0;top:33%;height:104px;opacity:0;pointer-events:none;display:flex;flex-direction:column;justify-content:center;background:linear-gradient(90deg,rgba(0,0,0,0),rgba(190,20,30,.92) 10%,rgba(190,20,30,.92) 90%,rgba(0,0,0,0))}
+#warn::before,#warn::after{content:"";position:absolute;left:0;right:0;height:10px;background:repeating-linear-gradient(-45deg,rgba(245,180,0,.95) 0 14px,rgba(0,0,0,.9) 14px 28px);background-size:40px 100%;animation:tape 1s linear infinite;opacity:.9}
+#warn::before{top:0}#warn::after{bottom:0}
+@keyframes tape{to{background-position:40px 0}}
+#warn b{display:block;text-align:center;font:900 clamp(24px,4.2vw,40px)/1 var(--font);color:#fff;letter-spacing:.3em;padding-left:.3em;animation:blink .6s steps(2) infinite}
 #warn span{display:block;text-align:center;margin-top:10px;font:700 clamp(13px,1.9vw,16px)/1.3 var(--font);color:#fff}
-@keyframes blink{50%{opacity:.55}}
+@keyframes blink{50%{opacity:.5}}
 #warn.show{animation:warn 3s ease both}
 @keyframes warn{0%{opacity:0;transform:scaleY(.1)}6%{opacity:1;transform:scaleY(1)}90%{opacity:1;transform:scaleY(1)}100%{opacity:0;transform:scaleY(.1)}}
 #toasts{position:absolute;left:50%;bottom:calc(28px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px}
-.toast{padding:10px 16px;background:var(--ink);border-radius:var(--r);color:#fff;font:700 13px/1.2 var(--font);animation:toast 2.4s ease both;white-space:nowrap;box-shadow:var(--shadow-l)}
+.toast{padding:10px 18px;background:var(--blk);color:#fff;font:700 13px/1.2 var(--font);animation:toast 2.4s ease both;white-space:nowrap;box-shadow:inset 0 0 0 1px var(--line),inset 3px 0 0 var(--cyan)}
 @keyframes toast{0%{opacity:0;transform:translateY(10px)}10%{opacity:1;transform:none}82%{opacity:1}100%{opacity:0;transform:translateY(-6px)}}
-#hint{position:absolute;left:50%;bottom:calc(110px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);font:700 13px/1.3 var(--font);color:var(--ink);text-align:center;padding:10px 16px;background:var(--bg);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);transition:opacity .8s;width:max-content;max-width:calc(100% - 32px)}
+#hint{position:absolute;left:50%;bottom:calc(120px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);font:700 13px/1.3 var(--font);color:var(--tx2);text-align:center;padding:10px 16px;transition:opacity .8s;width:max-content;max-width:calc(100% - 32px);text-shadow:0 1px 8px #000}
 #hint.off{opacity:0}
-#hurt{position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 100px 16px rgba(229,56,74,.4);opacity:0}
+#hurt{position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 120px 24px rgba(224,49,49,.55);opacity:0}
 #hurt.on{animation:hurt .4s ease-out}
 @keyframes hurt{0%{opacity:1}100%{opacity:0}}
 
 /* ---------- 화면 ---------- */
 .screen{position:absolute;inset:0;display:flex;overflow:auto;touch-action:pan-y;padding:max(16px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
 .screen>*{margin:auto}
-#lab,#dex,#levelup,#pause,#result{background:rgba(236,238,243,.9)}
+#lab,#dex,#levelup,#pause,#result{background:rgba(1,3,6,.86);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 
-/* 메인: 좌측 흰 패널 + 우측 실시간 자동 시연 */
-#menu{padding:0;display:grid;grid-template-columns:minmax(0,560px) minmax(0,1fr);overflow:hidden;background:transparent}
+/* 타이틀 */
+#menu{padding:0;display:block;overflow:hidden;background:linear-gradient(90deg,rgba(2,4,7,.9) 0%,rgba(2,4,7,.55) 38%,rgba(2,4,7,0) 66%)}
 #menu>*{margin:0}
-.mn-panel{background:var(--bg);border-right:1px solid var(--line);overflow-y:auto;display:flex;flex-direction:column;gap:30px;padding:28px 40px 32px;box-shadow:var(--shadow-l);position:relative;z-index:1}
-.brand{display:flex;align-items:center;gap:10px;font:900 15px/1 var(--font);letter-spacing:-.02em}
-.brand svg{width:28px;height:28px;color:var(--blue)}
-.mn-hero{display:flex;flex-direction:column;gap:18px}
-.mn-hero h1{font:900 clamp(34px,4.2vw,52px)/1.14 var(--font);letter-spacing:-.05em;color:var(--ink)}
-.lede{max-width:44ch;font:400 15px/1.75 var(--font);color:var(--ink2);text-wrap:pretty}
-.lede b{font-weight:700}.lede b.c0{color:var(--t0)}.lede b.c1{color:#c97100}.lede b.c2{color:var(--t2)}
-.mn-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:4px}
-.mn-sec{display:flex;flex-direction:column;gap:14px}
-.sec-t{display:flex;justify-content:space-between;align-items:center;font:700 12px/1 var(--font);letter-spacing:.06em;color:var(--mut);padding-bottom:10px;border-bottom:1px solid var(--line)}
-.cellpick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
-.cellbtn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 4px 10px;background:var(--bg);border:1px solid var(--line);border-radius:var(--r);color:var(--ink2);cursor:pointer;font:700 12px/1.1 var(--font);transition:background .12s,border-color .12s}
-.cellbtn:hover{background:var(--bg2)}
+.tt-left{position:absolute;left:clamp(24px,6vw,96px);top:50%;transform:translateY(-52%);display:flex;flex-direction:column;gap:30px;width:min(440px,calc(100% - 48px))}
+.tt-brand{display:flex;flex-direction:column;gap:14px}
+.tt-emblem{width:64px;height:64px;color:#fff;filter:drop-shadow(0 0 18px rgba(224,49,49,.5))}
+.tt-logo{font:900 clamp(54px,9vw,116px)/.9 var(--font);letter-spacing:-.045em;color:#fff;text-shadow:0 0 50px rgba(0,0,0,.6)}
+.tt-logo span{display:block}
+.tt-logo span:last-child{color:var(--red);text-shadow:0 0 40px rgba(224,49,49,.5);position:relative;display:inline-block}
+.tt-logo span:last-child::after{content:"";position:absolute;left:0;right:-24px;bottom:-12px;height:8px;background:repeating-linear-gradient(-45deg,var(--amber) 0 12px,#000 12px 24px);opacity:.95}
+.tt-sub{display:flex;flex-direction:column;gap:6px;margin-top:14px}
+.tt-sub b{font:900 18px/1 var(--font);letter-spacing:.02em}
+.tt-sub i{font:700 10px/1 var(--font);font-style:normal;letter-spacing:.3em;color:var(--mut)}
+.tt-menu{display:flex;flex-direction:column;gap:6px}
+.mi{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:15px 20px 15px 18px;border:0;background:transparent;color:var(--tx2);text-align:left;cursor:pointer;box-shadow:inset 3px 0 0 transparent;transition:background .14s,color .14s,box-shadow .14s,transform .14s}
+.mi b{font:900 21px/1 var(--font);letter-spacing:-.02em}
+.mi small{font:700 10px/1 var(--font);letter-spacing:.24em;color:var(--mut)}
+.mi:hover,.mi.sel{background:linear-gradient(90deg,rgba(224,49,49,.22),rgba(224,49,49,0));color:#fff;box-shadow:inset 3px 0 0 var(--red);transform:translateX(8px)}
+.mi.main{color:#fff;background:linear-gradient(90deg,rgba(224,49,49,.5),rgba(224,49,49,.05));box-shadow:inset 3px 0 0 var(--red)}
+.mi.main b{font-size:26px}
+.mi span{font:700 11px/1 var(--font);color:var(--mut)}
+.tt-top{position:absolute;top:20px;right:max(24px,env(safe-area-inset-right));display:flex;gap:8px;align-items:center}
+.coin{display:inline-flex;align-items:center;gap:10px;height:40px;padding:0 14px;background:var(--blk);box-shadow:inset 0 0 0 1px var(--line);font:700 11px/1 var(--font);white-space:nowrap;color:var(--tx2);letter-spacing:.1em;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px))}
+.coin i{width:8px;height:8px;background:var(--pink);box-shadow:0 0 8px var(--pink)}
+.coin b{font-weight:900;color:#fff;font-size:15px;letter-spacing:0;font-variant-numeric:tabular-nums}
+.tt-right{position:absolute;right:clamp(24px,5vw,80px);bottom:calc(11vh + 20px);width:min(400px,calc(100% - 48px));display:flex;flex-direction:column;gap:14px}
+.cellpick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.cellbtn{display:flex;flex-direction:column;align-items:center;gap:0;padding:6px 2px 8px;background:rgba(7,11,16,.7);border:0;color:var(--mut);cursor:pointer;font:700 11px/1.1 var(--font);box-shadow:inset 0 0 0 1px var(--line);transition:background .12s,color .12s;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,0 100%)}
+.cellbtn:hover{background:rgba(20,30,40,.9);color:#fff}
 .cellbtn canvas{width:60px;height:60px;display:block}
-.cellbtn.on{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink);color:var(--ink);background:var(--bg)}
-.heroinfo h2{font:900 20px/1.2 var(--font);letter-spacing:-.03em}
-.heroinfo h2 small{margin-left:8px;font:700 11px/1 var(--font);color:var(--mut);letter-spacing:.06em}
-.heroinfo p{font:400 14px/1.65 var(--font);color:var(--ink2);margin:6px 0 14px}
-.stats{display:grid;grid-template-columns:auto 1fr;gap:9px 14px;align-items:center;font:700 11px/1 var(--font);color:var(--ink2)}
-.stats .bar{height:6px;background:var(--bg3);overflow:hidden}
-.stats .bar i{display:block;height:100%;background:var(--bc,var(--blue))}
+.cellbtn.on{background:rgba(224,49,49,.2);color:#fff;box-shadow:inset 0 0 0 1px var(--red),inset 0 -3px 0 var(--red)}
+.heroinfo{padding:16px 18px 16px;background:var(--blk);box-shadow:inset 0 0 0 1px var(--line);clip-path:var(--cut)}
+.heroinfo h2{font:900 28px/1.1 var(--font);letter-spacing:-.03em}
+.heroinfo h2 small{display:block;margin-top:6px;font:700 10px/1 var(--font);color:var(--mut);letter-spacing:.24em}
+.heroinfo p{font:400 13px/1.65 var(--font);color:var(--tx2);margin:10px 0 14px}
+.stats{display:grid;grid-template-columns:auto 1fr;gap:9px 14px;align-items:center;font:700 11px/1 var(--font);color:var(--tx2)}
+.stats .bar{height:5px;background:rgba(255,255,255,.1)}
+.stats .bar i{display:block;height:100%;background:var(--bc,var(--cyan));box-shadow:0 0 8px var(--bc,var(--cyan))}
 .heroinfo .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
-.rec{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
-.rec div{background:var(--bg);padding:12px 14px}
-.rec small{display:block;font:700 10px/1 var(--font);letter-spacing:.08em;color:var(--mut);margin-bottom:7px}
-.rec b{font:900 20px/1 var(--font);font-variant-numeric:tabular-nums}
-.keys{font:400 12px/1.9 var(--font);color:var(--mut)}
-.keys kbd{font:700 11px/1 var(--font);padding:4px 6px;border-radius:4px;border:1px solid var(--line2);background:var(--bg2);color:var(--ink2);margin-inline:1px}
-.mn-stage{position:relative;pointer-events:none;min-width:0}
-.mn-chips{position:absolute;top:20px;right:max(20px,env(safe-area-inset-right));display:flex;gap:8px;align-items:center;pointer-events:auto}
-.coin{display:inline-flex;align-items:center;gap:10px;height:40px;padding:0 14px;border-radius:var(--r);background:var(--bg);border:1px solid var(--line);box-shadow:var(--shadow);font:700 12px/1 var(--font);white-space:nowrap;color:var(--ink2)}
-.coin i{width:8px;height:8px;background:var(--pink)}
-.coin b{font-weight:900;color:var(--ink);font-size:15px;font-variant-numeric:tabular-nums}
-.mn-live{position:absolute;left:24px;bottom:24px;display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:var(--r);background:var(--bg);border:1px solid var(--line);box-shadow:var(--shadow);font:500 12px/1 var(--font);color:var(--ink2)}
-.mn-live::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--t2);animation:blink .9s steps(2) infinite}
-.mn-live b{font-weight:900;color:var(--ink)}
+.tt-foot{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding:14px clamp(24px,6vw,96px) calc(14px + env(safe-area-inset-bottom,0px));background:linear-gradient(0deg,rgba(0,0,0,.7),rgba(0,0,0,0));font:500 12px/1.6 var(--font);color:var(--mut)}
+.rec{display:flex;gap:24px;align-items:baseline}
+.rec div{display:flex;gap:8px;align-items:baseline}
+.rec small{font:700 10px/1 var(--font);letter-spacing:.14em;color:var(--mut)}
+.rec b{font:900 15px/1 var(--font);color:#fff;font-variant-numeric:tabular-nums}
+.keys kbd{font:700 11px/1 var(--font);padding:4px 6px;background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 1px var(--line);color:var(--tx2);margin-inline:1px}
 
 /* 모달 */
 .modal{width:min(980px,100%);padding:0;display:flex;flex-direction:column}
 .mhead{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;padding:24px 28px 20px;border-bottom:1px solid var(--line)}
 .mhead h2{font:900 26px/1.15 var(--font);letter-spacing:-.04em}
-.mhead p{margin-top:8px;font:400 13px/1.65 var(--font);color:var(--ink2);max-width:62ch}
+.mhead p{margin-top:8px;font:400 13px/1.65 var(--font);color:var(--tx2);max-width:62ch}
 .mhead .side{display:flex;align-items:center;gap:8px}
 .modal .vgrid,.modal .dexgrid{margin:24px 28px 28px}
 .vgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.vcard{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px;border-radius:var(--r);background:var(--bg);border:1px solid var(--line)}
-.vcard .ibadge{background:var(--ink)}
+.vcard{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px;background:#0f161d;box-shadow:inset 0 0 0 1px var(--line)}
 .vcard b{font:700 14px/1.25 var(--font)}
-.vcard p{font:400 12px/1.4 var(--font);color:var(--ink2)}
+.vcard p{font:400 12px/1.4 var(--font);color:var(--tx2)}
 .pips{display:flex;gap:3px;margin-top:8px}
-.pips i{width:18px;height:4px;background:var(--bg3)}
-.pips i.on{background:var(--blue)}
+.pips i{width:18px;height:4px;background:rgba(255,255,255,.12)}
+.pips i.on{background:var(--red)}
 .vcard .btn{min-height:36px;padding:0 12px;font-size:12px;min-width:78px}
-.vcard .btn:hover{background:var(--ink);color:#fff}
-.vcard .btn:disabled:hover{background:var(--bg);color:inherit;border-color:var(--line2)}
+.vcard .btn:hover{background:var(--red);color:#fff}
+.vcard .btn:disabled:hover{background:#121a22}
 .dexgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(186px,1fr));gap:10px;max-height:min(60vh,540px);overflow:auto;padding-right:6px;touch-action:pan-y}
-.dcard{--c:var(--t0);display:flex;flex-direction:column;gap:6px;padding:10px 10px 12px;border-radius:var(--r);background:var(--bg);border:1px solid var(--line);border-top:3px solid var(--c);min-width:0}
-.dcard .pic{height:92px;background:var(--bg2);background-image:radial-gradient(rgba(14,18,24,.1) 1px,transparent 1px);background-size:14px 14px;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:4px}
+.dcard{--c:var(--t0);display:flex;flex-direction:column;gap:6px;padding:10px 10px 12px;background:#0f161d;box-shadow:inset 0 0 0 1px var(--line),inset 0 3px 0 var(--c);min-width:0}
+.dcard .pic{height:92px;background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.08),rgba(0,0,0,0) 70%),#070b10;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .dcard .pic canvas{height:100%;width:auto;aspect-ratio:1;display:block}
 .dcard b{font:900 14px/1.3 var(--font);margin-top:4px;letter-spacing:-.02em}
 .dcard small{font:500 11px/1.3 var(--font);color:var(--mut)}
 .dcard .tag{align-self:flex-start}
-.dcard p{font:400 12px/1.55 var(--font);color:var(--ink2)}
+.dcard p{font:400 12px/1.55 var(--font);color:var(--tx2)}
 .dcard dl{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font:500 11px/1.35 var(--font);padding-top:6px;border-top:1px solid var(--line)}
-.dcard dt{color:var(--mut)}.dcard dd{color:var(--ink);font-weight:700}
-.dcard.lock .pic{opacity:.7}.dcard.lock b{color:var(--mut)}
+.dcard dt{color:var(--mut)}.dcard dd{color:var(--tx);font-weight:700}
+.dcard.lock .pic canvas{opacity:.5}.dcard.lock b{color:var(--mut)}
 
 /* 면역 반응 (레벨업) */
 .lu-wrap{width:min(1000px,100%);display:flex;flex-direction:column;align-items:flex-start;gap:26px}
 .lu-head{display:flex;flex-direction:column;gap:8px}
-.lu-head h2{font:900 clamp(30px,5vw,44px)/1.1 var(--font);letter-spacing:-.05em;color:var(--ink)}
-.lu-head p{font:500 14px/1.4 var(--font);color:var(--ink2)}
+.lu-head h2{font:900 clamp(30px,5vw,46px)/1.1 var(--font);letter-spacing:-.05em}
+.lu-head p{font:500 14px/1.4 var(--font);color:var(--tx2)}
 .lu-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;width:100%}
-.card{--c:var(--blue);position:relative;display:flex;flex-direction:column;text-align:left;border-radius:var(--r);background:var(--bg);border:1px solid var(--line);border-top:4px solid var(--c);box-shadow:var(--shadow);cursor:pointer;color:var(--ink);transition:transform .14s,box-shadow .14s,border-color .14s;animation:cardin .32s cubic-bezier(.2,1,.3,1) both;padding:0}
+.card{--c:var(--cyan);position:relative;display:flex;flex-direction:column;text-align:left;background:#0c1319;border:0;cursor:pointer;color:var(--tx);box-shadow:inset 0 0 0 1px var(--line),inset 0 4px 0 var(--c);transition:transform .14s,box-shadow .14s,background .14s;animation:cardin .32s cubic-bezier(.2,1,.3,1) both;padding:0;clip-path:var(--cut)}
 .card:nth-child(2){animation-delay:.05s}.card:nth-child(3){animation-delay:.1s}
 @keyframes cardin{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
-.card:hover{transform:translateY(-4px);box-shadow:var(--shadow-l);border-color:var(--ink);border-top-color:var(--c)}
-.card .head{display:flex;align-items:center;gap:12px;padding:16px 16px 12px}
+.card:hover{transform:translateY(-4px);background:#121b23;box-shadow:inset 0 0 0 1px var(--c),inset 0 4px 0 var(--c)}
+.card .head{display:flex;align-items:center;gap:12px;padding:20px 16px 12px}
 .card .head .ibadge{width:44px;height:44px;padding:10px}
 .card .body{display:flex;flex-direction:column;gap:8px;padding:0 18px 18px;flex:1}
 .card h3{font:900 20px/1.25 var(--font);letter-spacing:-.04em}
-.card h3 small{display:block;margin-top:4px;font:700 10px/1 var(--font);color:var(--mut);letter-spacing:.1em}
-.card .desc{font:700 14px/1.6 var(--font);color:var(--ink);text-wrap:pretty}
+.card h3 small{display:block;margin-top:4px;font:700 10px/1 var(--font);color:var(--mut);letter-spacing:.16em}
+.card .desc{font:700 14px/1.6 var(--font);color:var(--tx);text-wrap:pretty}
 .card .flav{margin-top:auto;padding-top:12px;border-top:1px solid var(--line);font:400 12px/1.6 var(--font);color:var(--mut);text-wrap:pretty}
-.card .key{position:absolute;top:14px;right:14px;width:24px;height:24px;border:1px solid var(--line2);border-radius:4px;font:700 12px/22px var(--font);text-align:center;color:var(--ink2)}
-.card.evo{border-top-color:var(--yellow);box-shadow:0 0 0 2px var(--yellow),var(--shadow-l);background:#fffdf3}
-.card.evo .head .ibadge{background:var(--yellow);color:#3a2a00}
-.card.evo .head .tag{background:var(--yellow);color:#3a2a00}
-.card.counter{border-top-color:var(--violet)}
-.card.counter .head .ibadge{background:var(--violet)}
-.lu-foot{display:flex;align-items:center;gap:16px;flex-wrap:wrap;font:500 12px/1 var(--font);color:var(--ink2)}
+.card .key{position:absolute;top:18px;right:16px;width:24px;height:24px;box-shadow:inset 0 0 0 1px var(--line2);font:700 12px/24px var(--font);text-align:center;color:var(--tx2)}
+.card.evo{--c:var(--amber);box-shadow:inset 0 0 0 1px var(--amber),inset 0 4px 0 var(--amber),0 0 40px rgba(245,180,0,.25);background:#171309}
+.card.evo .head .ibadge,.card.evo .head .tag{background:var(--amber);color:#201600}
+.card.counter{--c:var(--violet)}
+.lu-foot{display:flex;align-items:center;gap:16px;flex-wrap:wrap;font:500 12px/1 var(--font);color:var(--mut)}
 
 /* 일시정지 / 결과 */
 .pop{width:min(560px,100%);padding:0;display:flex;flex-direction:column}
 .pop>*{margin-inline:28px}
-.pop .eyebrow{margin-top:26px;font:700 11px/1 var(--font);letter-spacing:.12em;color:var(--mut)}
+.pop .eyebrow{margin-top:26px;font:700 10px/1 var(--font);letter-spacing:.24em;color:var(--red2)}
 .pop h2{margin-top:8px;font:900 30px/1.15 var(--font);letter-spacing:-.05em}
-.pop.win h2{color:var(--blue)}.pop.lose h2{color:var(--t2)}
-.pop .sub{margin-top:6px;font:400 14px/1.55 var(--font);color:var(--ink2)}
+.pop.win h2{color:var(--cyan)}.pop.lose h2{color:var(--red2)}
+.pop .sub{margin-top:6px;font:400 14px/1.55 var(--font);color:var(--tx2)}
 .pop>.sec{margin-top:20px}
-.lbl{font:700 11px/1 var(--font);color:var(--mut);letter-spacing:.08em;margin-bottom:10px}
+.lbl{font:700 10px/1 var(--font);color:var(--mut);letter-spacing:.2em;margin-bottom:10px}
 .build{display:flex;flex-wrap:wrap;gap:6px}
-.bi{--c:var(--blue);display:flex;align-items:center;gap:8px;padding:4px 10px 4px 4px;border-radius:4px;background:var(--bg2);border:1px solid var(--line);font:700 12px/1 var(--font)}
-.bi .ibadge{width:24px;height:24px;padding:5px;border-radius:3px}
+.bi{--c:var(--cyan);display:flex;align-items:center;gap:8px;padding:4px 10px 4px 4px;background:#0f161d;box-shadow:inset 0 0 0 1px var(--line);font:700 12px/1 var(--font)}
+.bi .ibadge{width:24px;height:24px;padding:5px;clip-path:none}
 .bi em{font-style:normal;color:var(--mut);font-size:11px;font-weight:500}
-.bi.evo{background:#fff6d6;border-color:#e8c95a}
+.bi.evo{box-shadow:inset 0 0 0 1px var(--amber)}
 .resrow{display:flex;gap:12px;align-items:stretch}
-.rank{flex:none;width:104px;background:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;border-radius:var(--r)}
-.rank small{font:700 9px/1 var(--font);letter-spacing:.2em;color:#aab3c0}
+.rank{flex:none;width:104px;background:linear-gradient(160deg,#1a2430,#0a0f14);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;box-shadow:inset 0 0 0 1px var(--line2)}
+.rank small{font:700 9px/1 var(--font);letter-spacing:.24em;color:var(--red2)}
 .rank b{font:900 56px/1.05 var(--font)}
-.kv{flex:1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
-.kv div{padding:11px 14px;background:var(--bg)}
-.kv small{display:block;font:700 10px/1 var(--font);color:var(--mut);letter-spacing:.06em;margin-bottom:6px}
+.kv{flex:1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line)}
+.kv div{padding:11px 14px;background:#0a1016}
+.kv small{display:block;font:700 10px/1 var(--font);color:var(--mut);letter-spacing:.1em;margin-bottom:6px}
 .kv b{font:900 19px/1 var(--font);font-variant-numeric:tabular-nums}
 .t3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.t3 div{padding:10px 12px;background:var(--bg2);border-left:3px solid var(--c)}
-.t3 small{display:block;font:700 10px/1 var(--font);color:var(--mut);letter-spacing:.06em;margin-bottom:6px}
+.t3 div{padding:10px 12px;background:#0f161d;box-shadow:inset 3px 0 0 var(--c)}
+.t3 small{display:block;font:700 10px/1 var(--font);color:var(--mut);letter-spacing:.1em;margin-bottom:6px}
 .t3 b{font:900 19px/1 var(--font);font-variant-numeric:tabular-nums}
-.earn b{color:#c2185b!important}
+.earn b{color:var(--pink)!important}
 .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px;margin-bottom:28px}
 .row .btn{flex:1 1 150px}
 
@@ -266,25 +272,31 @@ svg.ic{width:100%;height:100%;display:block;fill:none;stroke:currentColor;stroke
   .hud-top{top:14px}
   #vitals{width:190px;padding:8px 10px}
   .vrow{padding:5px 0}
-  .mn-panel{padding:22px 32px 24px;gap:22px}
+  .tt-left{gap:22px}.mi{padding:11px 18px}.tt-emblem{width:48px;height:48px}
 }
 @media (max-width:900px){
-  #menu{grid-template-columns:minmax(0,1fr);grid-template-rows:34vh minmax(0,1fr)}
-  .mn-stage{order:-1}
-  .mn-panel{border-right:0;border-top:1px solid var(--line);padding:22px 20px 28px;gap:24px}
-  .mn-live{left:14px;bottom:14px}
-  .mn-chips{top:14px;right:14px}
+  #menu{background:linear-gradient(180deg,rgba(2,4,7,.75),rgba(2,4,7,.2) 40%,rgba(2,4,7,.85))}
+  .tt-left{top:76px;transform:none;left:20px;gap:18px;width:calc(100% - 40px)}
+  .tt-emblem{width:44px;height:44px}
+  .tt-sub{margin-top:6px}
+  .tt-menu{flex-direction:row;flex-wrap:wrap;gap:6px}
+  .mi{padding:12px 16px;flex:1 1 140px}.mi.main{flex-basis:100%}.mi small{display:none}
+  .mi:hover,.mi.sel{transform:none}
+  .tt-right{position:absolute;left:20px;right:20px;width:auto;bottom:60px}
+  .heroinfo p{display:none}
+  .tt-foot{padding:12px 20px calc(12px + env(safe-area-inset-bottom,0px))}
+  .keys{display:none}
+  .tt-top{top:14px;right:14px}
 }
 @media (max-width:720px){
   .lu-cards{grid-template-columns:minmax(0,1fr);gap:8px}
-  .card{flex-direction:row;align-items:stretch;border-top-width:1px;border-left:4px solid var(--c)}
-  .card:hover{border-top-color:var(--ink)}
+  .card{flex-direction:row;align-items:stretch}
   .card .head{flex-direction:column;justify-content:center;padding:14px;width:80px;flex:none;gap:0}
   .card .head .tag{display:none}
   .card .body{padding:14px 16px 14px 0}
   .card .flav,.card .key{display:none}.card h3{font-size:16px}
   .vgrid{grid-template-columns:minmax(0,1fr)}
-  #timer{font-size:18px;padding:4px 12px}
+  #timer{font-size:18px;padding:4px 14px}
   .tier{padding:2px 8px 2px 3px}.tier canvas{width:20px;height:20px}.tier b{font-size:12px}
   .hud-top{top:14px;display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"lv r" "m m" "w w" "p p" "s s";gap:8px 8px}
   .hud-l{display:contents}
@@ -293,24 +305,23 @@ svg.ic{width:100%;height:100%;display:block;fill:none;stroke:currentColor;stroke
   .slots{max-width:100%}
   #zone{order:5}
   .nextboss{order:6;width:100%;text-align:left}
-  .hp{flex:1}
+  .vital{flex:1}
   #vitals{display:none}
-  .keys{display:none}
   .resrow{flex-direction:column}.rank{width:auto;padding:12px}
   .toast{font-size:12px;white-space:normal;text-align:center}
   .modal .vgrid,.modal .dexgrid{margin:16px}
   .mhead{padding:18px 16px 14px}
 }
 @media (max-width:480px){
-  .cellbtn canvas{width:46px;height:46px}.cellbtn{font-size:11px}
-  .btn.lg{font-size:15px;padding:0 24px;min-height:50px}
+  .cellbtn canvas{width:46px;height:46px}.cellbtn{font-size:10px}
   .mhead h2{font-size:21px}
   .pop>*{margin-inline:18px}
-  .mn-hero h1{font-size:32px}
+  .tt-logo{font-size:52px}
+  .rec{gap:14px}
 }
 @media (prefers-reduced-motion:reduce){
   .card,#banner.show,.toast,#hurt.on,#warn.show{animation-duration:.01s}
-  #warn b,.mn-live::before{animation:none}
+  #warn b,#warn::before,#warn::after,#hpState.danger{animation:none}
 }
 </style>
 
@@ -328,10 +339,10 @@ svg.ic{width:100%;height:100%;display:block;fill:none;stroke:currentColor;stroke
       <div class="hud-l">
         <div class="lvrow">
           <div class="lvb"><small>면역</small><b id="lv">1</b></div>
-          <div class="hp blk">
-            <div class="hpheart"></div>
+          <div class="vital blk">
+            <div class="vt-head"><span id="hpState">양호</span><b id="hptxt">100 / 100</b></div>
+            <canvas id="ecg" width="480" height="84"></canvas>
             <div class="hptrack"><i id="hpghost"></i><i id="hpfill"></i></div>
-            <span id="hptxt">100 / 100</span>
           </div>
         </div>
         <div id="wslots" class="slots"></div>
@@ -347,15 +358,15 @@ svg.ic{width:100%;height:100%;display:block;fill:none;stroke:currentColor;stroke
           <div class="tier t2 blk"><canvas width="60" height="60"></canvas><b>0</b></div>
         </div>
         <div id="nextboss" class="nextboss"></div>
-        <div id="bossbar" class="blk" hidden>
-          <div class="bn"><b id="bossname"></b><span id="bosssub"></span></div>
-          <div class="bb"><i id="bossfill"></i></div>
-        </div>
       </div>
       <div class="hud-r">
         <div class="kills blk"><svg class="ic" viewBox="0 0 32 32"><circle cx="16" cy="16" r="10"/><path d="M11 11l10 10M21 11 11 21"/></svg><div><b id="killn">0</b></div><small>제거</small></div>
         <button class="iconbtn" id="btnPause" aria-label="일시정지"><svg class="ic" viewBox="0 0 32 32"><path d="M11 6v20M21 6v20"/></svg></button>
       </div>
+    </div>
+    <div id="bossbar" class="blk" hidden>
+      <div class="bn"><b id="bossname"></b><span id="bosssub"></span></div>
+      <div class="bb"><i id="bossfill"></i></div>
     </div>
     <div id="vitals" class="blk">
       <h4>환자 상태 <i>● LIVE</i></h4>
@@ -369,33 +380,37 @@ svg.ic{width:100%;height:100%;display:block;fill:none;stroke:currentColor;stroke
     <div id="hint"></div>
   </div>
 
-  <!-- 메뉴 -->
-  <section id="menu" class="screen" aria-label="메인 메뉴">
-    <div class="mn-panel">
-      <div class="brand"><svg class="ic" viewBox="0 0 32 32"><circle cx="16" cy="16" r="12"/><path d="M16 27V17M16 17 9 9M16 17 23 9"/></svg>면역 서바이벌</div>
-      <div class="mn-hero">
-        <h1>면역세포가 되어<br>감염을 막아라</h1>
-        <p class="lede">병원체가 점막을 뚫고 침입했습니다. 비강에서 폐, 신경계까지 번지는 감염을 7분 동안 막아내는 서바이벌 시뮬레이션입니다. <b class="c0">약한 바이러스</b>는 떼로, <b class="c1">강한 바이러스</b>는 교묘하게, <b class="c2">심각한 바이러스</b>는 치명적으로 공격합니다. 변종이 나타나면 대응 항체를 만드세요.</p>
-        <div class="mn-actions">
-          <button class="btn primary lg" id="btnStart">시작하기</button>
-          <button class="btn" id="btnLab"><svg class="ic" viewBox="0 0 32 32"><path d="M21 4l7 7M24 7l-14 14-3 3M10 21l-4 4M14 17l-2-2M4 28l4-4M17 14l4 4"/></svg>백신 연구소</button>
-          <button class="btn" id="btnDex"><svg class="ic" viewBox="0 0 32 32"><path d="M5 6h9a2 2 0 0 1 2 2v19a2 2 0 0 0-2-2H5zM27 6h-9a2 2 0 0 0-2 2v19a2 2 0 0 1 2-2h9z"/></svg>병원체 정보 <span id="dexCount"></span></button>
-        </div>
-      </div>
-      <section class="mn-sec">
-        <h2 class="sec-t">면역세포 선택</h2>
-        <div class="cellpick" id="cellPick" role="radiogroup" aria-label="면역세포"></div>
-        <div class="heroinfo" id="heroInfo"></div>
-      </section>
-      <section class="mn-sec">
-        <h2 class="sec-t">내 기록</h2>
-        <div class="rec"><div><small>최고 생존</small><b id="recTime">--:--</b></div><div><small>최다 제거</small><b id="recKills">0</b></div><div><small>변종 제압 승리</small><b id="recWins">0회</b></div></div>
-      </section>
-      <p class="keys"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 또는 방향키로 이동 · <kbd>P</kbd> 일시정지 · 공격은 자동 · 터치는 화면을 누른 채 드래그</p>
+  <!-- 타이틀 -->
+  <section id="menu" class="screen" aria-label="타이틀">
+    <div class="tt-top">
+      <span class="coin"><i></i>혈청 <b id="serumTop">0</b></span>
+      <button class="iconbtn" id="btnSound" aria-label="소리 켜기/끄기"></button>
     </div>
-    <div class="mn-stage" id="mnStage">
-      <div class="mn-chips"><span class="coin"><i></i>혈청 <b id="serumTop">0</b></span><button class="iconbtn" id="btnSound" aria-label="소리 켜기/끄기"></button></div>
-      <div class="mn-live"><b>자동 시연</b><span id="liveName"></span></div>
+    <div class="tt-left">
+      <div class="tt-brand">
+        <svg class="tt-emblem" viewBox="0 0 120 120" aria-hidden="true">
+          <circle cx="60" cy="60" r="55" fill="none" stroke="currentColor" stroke-width="3"/>
+          <circle cx="60" cy="60" r="45" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 6" opacity=".6"/>
+          <g id="emAb" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"><path d="M60 60V26M60 26L48 13M60 26 72 13"/></g>
+          <use href="#emAb" transform="rotate(120 60 60)"/><use href="#emAb" transform="rotate(240 60 60)"/>
+          <circle cx="60" cy="60" r="10" fill="#e03131"/>
+        </svg>
+        <h1 class="tt-logo"><span>IMMUNE</span><span>ZERO</span></h1>
+        <div class="tt-sub"><b>면역 서바이벌</b><i>INFECTION RESPONSE SIMULATION</i></div>
+      </div>
+      <nav class="tt-menu" aria-label="메인 메뉴">
+        <button class="mi main" id="btnStart"><b>시작하기</b><small>START</small></button>
+        <button class="mi" id="btnLab"><b>백신 연구소</b><small>LAB</small></button>
+        <button class="mi" id="btnDex"><b>병원체 정보</b><small>DATABASE <span id="dexCount"></span></small></button>
+      </nav>
+    </div>
+    <div class="tt-right">
+      <div class="cellpick" id="cellPick" role="radiogroup" aria-label="면역세포"></div>
+      <div class="heroinfo" id="heroInfo"></div>
+    </div>
+    <div class="tt-foot">
+      <div class="rec"><div><small>최고 생존</small><b id="recTime">--:--</b></div><div><small>최다 제거</small><b id="recKills">0</b></div><div><small>변종 제압</small><b id="recWins">0회</b></div></div>
+      <p class="keys"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 이동 · <kbd>P</kbd> 일시정지 · 공격은 자동 · 터치는 화면을 누른 채 드래그</p>
     </div>
   </section>
 
@@ -443,7 +458,7 @@ svg.ic{width:100%;height:100%;display:block;fill:none;stroke:currentColor;stroke
       <h2>일시정지</h2>
       <div class="sec"><div class="lbl">현재 구성</div><div class="build" id="pauseBuild"></div></div>
       <div class="row">
-        <button class="btn primary" id="btnResume" style="min-height:48px;font-size:15px">계속하기</button>
+        <button class="btn primary" id="btnResume">계속하기</button>
         <button class="btn pink" id="btnQuit">포기하고 메뉴로</button>
       </div>
     </div>
@@ -459,7 +474,7 @@ svg.ic{width:100%;height:100%;display:block;fill:none;stroke:currentColor;stroke
       <div class="sec"><div class="lbl">위협 단계별 제거</div><div class="t3" id="resTier"></div></div>
       <div class="sec"><div class="lbl">최종 구성</div><div class="build" id="resBuild"></div></div>
       <div class="row">
-        <button class="btn primary" id="btnAgain" style="min-height:48px;font-size:15px">다시 시작</button>
+        <button class="btn primary" id="btnAgain">다시 시작</button>
         <button class="btn" id="btnMenu">메뉴로</button>
       </div>
     </div>
@@ -781,7 +796,7 @@ const icon = (id) => `<svg class="ic" viewBox="0 0 32 32" aria-hidden="true">${I
 /* ============================================================
    카툰 스프라이트: 굵은 외곽선 + 표정. 오프스크린 캔버스에 한 번만 굽는다
    ============================================================ */
-const OUT = '#05101c';
+const OUT = 'rgba(2,8,16,.62)';
 const SS = 3;
 function mkCanvas(w, h) {
   const c = document.createElement('canvas');
@@ -811,52 +826,75 @@ function polyPath(g, n, r, rot) {
   g.closePath();
 }
 function toonFill(g, r, c) { g.fillStyle = rgbs(c); }
-function body(g, r, c, k) {                    // 현재 경로: 플랫 채움 + 하단 우측 2톤 음영 + 얇은 외곽선
-  g.fillStyle = rgbs(c); g.fill();
+function body(g, r, c, k) {                    // 현재 경로: 광택 구체 음영 (하이라이트 · 반사광 · 가장자리 어두움)
+  const gr = g.createRadialGradient(-r * .32, -r * .38, r * .04, -r * .08, -r * .1, r * 1.22);
+  gr.addColorStop(0, rgbs(mixc(c, .62))); gr.addColorStop(.36, rgbs(mixc(c, .1))); gr.addColorStop(.72, rgbs(mixc(c, -.2))); gr.addColorStop(1, rgbs(mixc(c, -.58)));
+  g.fillStyle = gr; g.fill();
   g.save(); g.clip();
-  g.fillStyle = 'rgba(2,10,24,.28)'; g.beginPath(); g.arc(-r * .26, -r * .3, r * 1.22, 0, TAU); g.rect(-r * 4, -r * 4, r * 8, r * 8); g.fill('evenodd');
+  const rl = g.createRadialGradient(r * .56, r * .62, 0, r * .56, r * .62, r * .95);
+  rl.addColorStop(0, rgba(mixc(c, .5), .42)); rl.addColorStop(1, rgba(mixc(c, .5), 0));
+  g.fillStyle = rl; g.fillRect(-r * 3, -r * 3, r * 6, r * 6);
+  const ao = g.createRadialGradient(0, 0, r * .5, 0, 0, r * 1.08);
+  ao.addColorStop(0, 'rgba(0,8,18,0)'); ao.addColorStop(1, 'rgba(0,8,18,.34)');
+  g.fillStyle = ao; g.fillRect(-r * 3, -r * 3, r * 6, r * 6);
   g.restore();
-  g.lineWidth = Math.max(1, r * (k || .16) * .38); g.strokeStyle = rgbs(mixc(c, -.5)); g.stroke();
+  g.lineWidth = Math.max(.9, r * .045); g.strokeStyle = OUT; g.stroke();
 }
-function shine(g, r, a0, a1) {
-  g.strokeStyle = 'rgba(255,255,255,.6)'; g.lineWidth = Math.max(1, r * .06);
-  g.beginPath(); g.arc(0, 0, r * .76, Math.PI * (a0 || 1.08), Math.PI * (a1 || 1.38)); g.stroke();
+function shine(g, r) {                         // 정반사 하이라이트
+  g.save(); g.translate(-r * .34, -r * .4); g.rotate(-.6);
+  const s = g.createRadialGradient(0, 0, 0, 0, 0, r * .34);
+  s.addColorStop(0, 'rgba(255,255,255,.85)'); s.addColorStop(.4, 'rgba(255,255,255,.3)'); s.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = s; g.beginPath(); g.ellipse(0, 0, r * .34, r * .22, 0, 0, TAU); g.fill();
+  g.fillStyle = 'rgba(255,255,255,.95)'; g.beginPath(); g.ellipse(-r * .03, -r * .02, r * .09, r * .055, 0, 0, TAU); g.fill();
+  g.restore();
 }
-function rays(g, n, r0, r1, w, c, bulb, rot) {  // 외곽선 먼저, 색 나중에
-  const pt = (i, rr) => { const a = (rot || 0) + i / n * TAU; return [Math.cos(a) * rr, Math.sin(a) * rr]; };
-  g.strokeStyle = OUT; g.lineWidth = w + Math.max(1.6, w * .4);
-  g.beginPath(); for (let i = 0; i < n; i++) { const p = pt(i, r0), q = pt(i, r1); g.moveTo(p[0], p[1]); g.lineTo(q[0], q[1]); } g.stroke();
-  if (bulb) for (let i = 0; i < n; i++) { const q = pt(i, r1); g.fillStyle = OUT; g.beginPath(); g.arc(q[0], q[1], bulb + Math.max(.9, bulb * .2), 0, TAU); g.fill(); }
-  g.strokeStyle = rgbs(mixc(c, -.12)); g.lineWidth = w;
-  g.beginPath(); for (let i = 0; i < n; i++) { const p = pt(i, r0), q = pt(i, r1); g.moveTo(p[0], p[1]); g.lineTo(q[0], q[1]); } g.stroke();
-  if (bulb) for (let i = 0; i < n; i++) { const q = pt(i, r1); g.fillStyle = rgbs(mixc(c, .3)); g.beginPath(); g.arc(q[0], q[1], bulb, 0, TAU); g.fill(); }
+function facets(g, R, rot, n) {                // 정다면체 면 음영
+  const L = -2.4;
+  for (let i = 0; i < n; i++) {
+    const a0 = rot + i / n * TAU, a1 = rot + (i + 1) / n * TAU, lit = Math.cos((a0 + a1) / 2 - L);
+    g.beginPath(); g.moveTo(0, 0); g.lineTo(Math.cos(a0) * R, Math.sin(a0) * R); g.lineTo(Math.cos(a1) * R, Math.sin(a1) * R); g.closePath();
+    g.fillStyle = lit > 0 ? `rgba(255,255,255,${.17 * lit})` : `rgba(0,10,24,${.3 * -lit})`; g.fill();
+  }
+  g.strokeStyle = 'rgba(255,255,255,.2)'; g.lineWidth = Math.max(.7, R * .035); g.beginPath();
+  for (let i = 0; i < n; i++) { const a = rot + i / n * TAU; g.moveTo(0, 0); g.lineTo(Math.cos(a) * R, Math.sin(a) * R); }
+  g.stroke();
+}
+function rays(g, n, r0, r1, w, c, bulb, rot) {  // 끝이 가는 단백질 스파이크 + 광택 구슬
+  const dc = rgbs(mixc(c, -.15));
+  for (let i = 0; i < n; i++) {
+    const a = (rot || 0) + i / n * TAU, ca = Math.cos(a), sa = Math.sin(a), px = -sa, py = ca;
+    g.beginPath();
+    g.moveTo(ca * r0 + px * w * .7, sa * r0 + py * w * .7); g.lineTo(ca * r1 + px * w * .2, sa * r1 + py * w * .2);
+    g.lineTo(ca * r1 - px * w * .2, sa * r1 - py * w * .2); g.lineTo(ca * r0 - px * w * .7, sa * r0 - py * w * .7); g.closePath();
+    g.fillStyle = dc; g.fill(); g.lineWidth = .8; g.strokeStyle = OUT; g.stroke();
+    if (bulb) {
+      const bx = ca * r1, by = sa * r1, gr = g.createRadialGradient(bx - bulb * .3, by - bulb * .35, 0, bx, by, bulb * 1.1);
+      gr.addColorStop(0, rgbs(mixc(c, .72))); gr.addColorStop(1, rgbs(mixc(c, -.1)));
+      g.fillStyle = gr; g.beginPath(); g.arc(bx, by, bulb, 0, TAU); g.fill(); g.lineWidth = .7; g.strokeStyle = OUT; g.stroke();
+    }
+  }
 }
 function crown() { /* 변종 표시는 HUD와 변이 링으로 한다 */ }
-function core(g, x, y, s, look) {            // 표정 대신 안쪽 핵(내부 구조)만 그린다
+function core(g, x, y, s, look) {              // 안쪽 핵(내부 구조)
   const dir = Array.isArray(look) ? look : null;
   g.save(); g.translate(x + (dir ? dir[0] * s * .35 : 0), y + (dir ? dir[1] * s * .25 : 0));
-  g.fillStyle = 'rgba(42,16,48,.3)'; g.beginPath(); g.ellipse(0, 0, s * .8, s * .68, dir ? Math.atan2(dir[1], dir[0]) : 0, 0, TAU); g.fill();
-  g.lineWidth = Math.max(1.3, s * .12); g.strokeStyle = 'rgba(42,16,48,.55)'; g.stroke();
-  g.fillStyle = 'rgba(255,255,255,.65)'; g.beginPath(); g.arc(-s * .25, -s * .22, s * .14, 0, TAU); g.fill();
+  const gr = g.createRadialGradient(-s * .2, -s * .2, 0, 0, 0, s * .9);
+  gr.addColorStop(0, 'rgba(60,84,170,.78)'); gr.addColorStop(1, 'rgba(8,14,48,.7)');
+  g.fillStyle = gr; g.beginPath(); g.ellipse(0, 0, s * .8, s * .68, dir ? Math.atan2(dir[1], dir[0]) : 0, 0, TAU); g.fill();
+  g.fillStyle = 'rgba(255,255,255,.55)'; g.beginPath(); g.arc(-s * .25, -s * .22, s * .13, 0, TAU); g.fill();
   g.restore();
 }
 /* ---- 병원체 17종 ---- */
-function drawIco(g, r, c, boss, mood) {
+function drawIco(g, r, c, boss) {
   const R = r * .92;
-  polyPath(g, 6, R, Math.PI / 6); body(g, R, c);
-  g.strokeStyle = rgbs(mixc(c, -.3)); g.lineWidth = Math.max(1, r * .07); g.beginPath();
-  for (let i = 0; i < 6; i++) { const a = Math.PI / 6 + i / 6 * TAU; g.moveTo(Math.cos(a) * R, Math.sin(a) * R); g.lineTo(Math.cos(a) * R * .66, Math.sin(a) * R * .66); }
-  g.stroke();
-  shine(g, R);
-  core(g, 0, -r * .04, r * .46, mood);
-  if (boss) crown(g, 0, -r * .86, r * .34);
+  polyPath(g, 6, R, Math.PI / 6); body(g, R, c); facets(g, R, Math.PI / 6, 6); shine(g, R);
+  core(g, 0, 0, r * .4);
 }
-function drawAdeno(g, r, c, boss, mood) {
+function drawAdeno(g, r, c, boss) {
   const R = r * .68;
-  rays(g, 6, R * .9, r * 1.1, r * .09, c, r * .12, Math.PI / 6);
-  polyPath(g, 6, R, Math.PI / 6); body(g, R, c);
-  shine(g, R);
-  core(g, 0, -r * .03, r * .36, mood);
+  rays(g, 6, R * .9, r * 1.1, r * .1, c, r * .13, Math.PI / 6);
+  polyPath(g, 6, R, Math.PI / 6); body(g, R, c); facets(g, R, Math.PI / 6, 6); shine(g, R);
+  core(g, 0, 0, r * .3);
 }
 function drawNoro(g, r, c, boss, mood) {
   g.beginPath();
@@ -983,11 +1021,11 @@ function drawCmv(g, r, c, boss, mood) {
 }
 function drawDengue(g, r, c) {
   const R = r * .9;
-  polyPath(g, 6, R, Math.PI / 6); body(g, R, c); shine(g, R);
-  g.strokeStyle = rgbs(mixc(c, -.32)); g.lineWidth = Math.max(1, r * .06); g.beginPath();
-  for (let i = 0; i < 6; i++) { const a = Math.PI / 6 + i / 6 * TAU, b = (i + 1) / 6 * TAU + Math.PI / 6; g.moveTo(Math.cos(a) * R * .9, Math.sin(a) * R * .9); g.lineTo(Math.cos((a + b) / 2) * R * .45, Math.sin((a + b) / 2) * R * .45); }
+  polyPath(g, 6, R, Math.PI / 6); body(g, R, c); facets(g, R, Math.PI / 6, 6); shine(g, R);
+  g.strokeStyle = rgbs(mixc(c, .35)); g.lineWidth = Math.max(.8, r * .05); g.beginPath();
+  for (let i = 0; i < 6; i++) { const a = Math.PI / 6 + i / 6 * TAU; g.moveTo(Math.cos(a) * R * .55, Math.sin(a) * R * .55); g.lineTo(Math.cos(a + .5) * R * .85, Math.sin(a + .5) * R * .85); }
   g.stroke();
-  core(g, 0, 0, r * .34);
+  core(g, 0, 0, r * .3);
 }
 function drawNipah(g, r, c) {
   rays(g, 20, r * .7, r * .98, r * .07, c, r * .07, 0);
@@ -1003,100 +1041,117 @@ const EXT = { ico: [1.3, 1.5], adeno: [1.4, 1.4], noro: [1.3, 1.3], rota: [1.3, 
 const SPR = {}, SPRW = {}, SPRM = {}, SPRD = {};
 function bakeVirus(key, def, boss) {
   const e = EXT[def.draw], fn = DRAW[def.draw], k = boss ? 1.12 : 1;
-  const s = bake(def.r * 2 * e[0] * k, def.r * 2 * e[1] * k, g => fn(g, def.r, def.col, boss, boss ? (def.draw === 'bullet' || def.draw === 'flu' ? 'fang' : 'angry') : def.mood));
-  SPR[key] = s; SPRW[key] = silhouette(s, '#fff'); SPRM[key] = silhouette(s, '#c25cff'); SPRD[key] = silhouette(s, '#3b1a44');
+  const s = bake(def.r * 2 * e[0] * k, def.r * 2 * e[1] * k, g => {
+    const gl = g.createRadialGradient(0, 0, def.r * .3, 0, 0, def.r * 1.4);        // 생체 발광 후광
+    gl.addColorStop(0, rgba(def.col, boss ? .42 : .3)); gl.addColorStop(1, rgba(def.col, 0));
+    g.fillStyle = gl; g.beginPath(); g.arc(0, 0, def.r * 1.4, 0, TAU); g.fill();
+    fn(g, def.r, def.col, boss);
+  });
+  SPR[key] = s; SPRW[key] = silhouette(s, '#fff'); SPRM[key] = silhouette(s, '#c25cff'); SPRD[key] = silhouette(s, '#33414f');
 }
 Object.keys(VIRUS).forEach(k => bakeVirus(k, VIRUS[k], false));
 Object.keys(BOSS).forEach(k => bakeVirus(k, BOSS[k], true));
 
 /* ---- 그림자 / 보조 스프라이트 ---- */
-const SHADOW = bake(48, 24, g => { g.fillStyle = 'rgba(30,20,50,.2)'; g.beginPath(); g.ellipse(0, 0, 22, 9, 0, 0, TAU); g.fill(); });
-const HERO_RING = bake(64, 32, g => {
-  g.strokeStyle = 'rgba(47,111,237,.95)'; g.lineWidth = 2.2; g.beginPath(); g.ellipse(0, 0, 27, 11, 0, 0, TAU); g.stroke();
-  g.fillStyle = 'rgba(47,111,237,.14)'; g.fill();
+const glowDisc = (g, r, col, a) => { const gr = g.createRadialGradient(0, 0, 0, 0, 0, r); gr.addColorStop(0, rgba(col, a)); gr.addColorStop(1, rgba(col, 0)); g.fillStyle = gr; g.beginPath(); g.arc(0, 0, r, 0, TAU); g.fill(); };
+const SHADOW = bake(52, 26, g => { g.save(); g.scale(1, .42); glowDisc(g, 24, [0, 0, 0], .6); g.restore(); });
+const HERO_RING = bake(72, 36, g => {
+  g.save(); g.scale(1, .4); glowDisc(g, 32, [80, 220, 255], .5); g.restore();
+  g.strokeStyle = 'rgba(150,238,255,.95)'; g.lineWidth = 1.5; g.beginPath(); g.ellipse(0, 0, 26, 10.5, 0, 0, TAU); g.stroke();
 });
 const GEMC = [[84, 200, 255], [190, 130, 255], [255, 214, 70]];
-const GEMS = GEMC.map(c => bake(18, 18, g => {
-  g.beginPath(); g.moveTo(0, -6); g.lineTo(4.6, 0); g.lineTo(0, 6); g.lineTo(-4.6, 0); g.closePath();
-  body(g, 6, c, .3);
-  g.strokeStyle = 'rgba(255,255,255,.8)'; g.lineWidth = .9; g.beginPath(); g.moveTo(-2.4, -1); g.lineTo(0, -4); g.stroke();
+const GEMS = GEMC.map(c => bake(24, 24, g => {
+  glowDisc(g, 11, c, .55);
+  g.beginPath(); g.moveTo(0, -6.5); g.lineTo(4.8, 0); g.lineTo(0, 6.5); g.lineTo(-4.8, 0); g.closePath();
+  body(g, 6.5, c, .3); facets(g, 5, Math.PI / 4, 4);
+  g.fillStyle = 'rgba(255,255,255,.9)'; g.beginPath(); g.arc(-1.6, -2.4, .9, 0, TAU); g.fill();
 }));
 const PICK = {
-  glucose: bake(34, 34, g => {                    // 포도당(피라노스 고리)
-    polyPath(g, 6, 12, Math.PI / 6); body(g, 12, [255, 106, 138], .2);
-    g.fillStyle = '#fff'; g.beginPath(); g.arc(Math.cos(-Math.PI / 6) * 12, Math.sin(-Math.PI / 6) * 12, 3, 0, TAU); g.fill();
-    g.strokeStyle = 'rgba(255,255,255,.85)'; g.lineWidth = 1.6; g.beginPath(); g.moveTo(-4, 1); g.lineTo(4, 1); g.moveTo(0, -3); g.lineTo(0, 5); g.stroke();
+  glucose: bake(40, 40, g => {                    // 포도당(피라노스 고리)
+    glowDisc(g, 17, [255, 110, 140], .5);
+    polyPath(g, 6, 11, Math.PI / 6); body(g, 11, [255, 106, 138], .2); shine(g, 11);
+    g.fillStyle = '#fff'; g.beginPath(); g.arc(Math.cos(-Math.PI / 6) * 11, Math.sin(-Math.PI / 6) * 11, 2.6, 0, TAU); g.fill();
   }),
-  magnet: bake(34, 34, g => {
-    g.lineCap = 'butt'; g.strokeStyle = OUT; g.lineWidth = 10; g.beginPath(); g.moveTo(-7, -9); g.lineTo(-7, 1); g.arc(0, 1, 7, Math.PI, 0, true); g.lineTo(7, -9); g.stroke();
-    g.strokeStyle = '#ff4560'; g.lineWidth = 6; g.stroke();
-    g.strokeStyle = '#f4f4ff'; g.lineWidth = 6; g.beginPath(); g.moveTo(-7, -9); g.lineTo(-7, -4); g.moveTo(7, -9); g.lineTo(7, -4); g.stroke();
+  magnet: bake(40, 40, g => {
+    glowDisc(g, 17, [127, 232, 255], .45);
+    g.lineCap = 'butt'; g.strokeStyle = OUT; g.lineWidth = 11; g.beginPath(); g.moveTo(-7, -9); g.lineTo(-7, 1); g.arc(0, 1, 7, Math.PI, 0, true); g.lineTo(7, -9); g.stroke();
+    g.strokeStyle = '#e03131'; g.lineWidth = 7; g.stroke();
+    g.strokeStyle = '#eef3f8'; g.lineWidth = 7; g.beginPath(); g.moveTo(-7, -9); g.lineTo(-7, -4); g.moveTo(7, -9); g.lineTo(7, -4); g.stroke();
   }),
-  bomb: bake(34, 34, g => {
+  bomb: bake(44, 44, g => {
+    glowDisc(g, 20, [255, 220, 60], .55);
     g.beginPath(); for (let i = 0; i < 16; i++) { const a = i / 16 * TAU, rr = i % 2 ? 7 : 13; g.lineTo(Math.cos(a) * rr, Math.sin(a) * rr); } g.closePath();
     body(g, 13, [255, 220, 60], .2); g.fillStyle = '#fff6c4'; g.beginPath(); g.arc(0, 0, 3.5, 0, TAU); g.fill();
   }),
-  chest: bake(40, 40, g => {
-    g.beginPath(); g.roundRect ? g.roundRect(-12, -9, 24, 19, 4) : g.rect(-12, -9, 24, 19);
-    body(g, 12, [255, 196, 60], .2);
-    g.fillStyle = OUT; g.fillRect(-12, -2, 24, 2.5);
-    g.fillStyle = '#fff1b8'; g.beginPath(); g.arc(0, 1, 3, 0, TAU); g.fill(); g.lineWidth = 1.6; g.strokeStyle = OUT; g.stroke();
+  chest: bake(48, 48, g => {
+    glowDisc(g, 22, [255, 196, 60], .55);
+    g.beginPath(); g.roundRect ? g.roundRect(-12, -9, 24, 19, 3) : g.rect(-12, -9, 24, 19);
+    body(g, 12, [255, 190, 50], .2);
+    g.fillStyle = 'rgba(0,0,0,.55)'; g.fillRect(-12, -2, 24, 2.4);
+    g.fillStyle = '#fff1b8'; g.beginPath(); g.arc(0, 1, 3, 0, TAU); g.fill();
   }),
 };
 const FX = {
-  ab: bake(34, 34, g => {                         // 항체 (Y)
-    g.strokeStyle = OUT; g.lineWidth = 7; g.beginPath(); g.moveTo(-9, 0); g.lineTo(0, 0); g.lineTo(7, -6); g.moveTo(0, 0); g.lineTo(7, 6); g.stroke();
-    g.strokeStyle = '#d6f6ff'; g.lineWidth = 3.6; g.stroke();
-    g.fillStyle = '#4fd8ff'; g.lineWidth = 1.8;
-    [[8, -6.5], [8, 6.5]].forEach(p => { g.beginPath(); g.arc(p[0], p[1], 2.8, 0, TAU); g.fill(); g.stroke(); });
+  ab: bake(40, 40, g => {                         // 항체 (Y)
+    glowDisc(g, 17, [127, 232, 255], .6);
+    g.strokeStyle = 'rgba(2,8,16,.75)'; g.lineWidth = 6.4; g.beginPath(); g.moveTo(-9, 0); g.lineTo(0, 0); g.lineTo(7, -6); g.moveTo(0, 0); g.lineTo(7, 6); g.stroke();
+    g.strokeStyle = '#e4fbff'; g.lineWidth = 3.4; g.stroke();
+    g.fillStyle = '#7fe8ff'; [[8, -6.5], [8, 6.5]].forEach(p => { g.beginPath(); g.arc(p[0], p[1], 2.8, 0, TAU); g.fill(); });
   }),
-  lance: bake(64, 26, g => {
+  lance: bake(72, 30, g => {
+    g.save(); g.scale(2.2, 1); glowDisc(g, 11, [190, 235, 255], .5); g.restore();
     g.beginPath(); g.moveTo(-22, 0); g.lineTo(-6, -3.6); g.lineTo(24, 0); g.lineTo(-6, 3.6); g.closePath();
-    g.fillStyle = '#f6fbff'; g.fill(); g.lineWidth = 2.4; g.strokeStyle = OUT; g.stroke();
-    g.fillStyle = 'rgba(120,220,255,.65)'; g.beginPath(); g.moveTo(-22, 0); g.lineTo(-6, -1.4); g.lineTo(2, 0); g.lineTo(-6, 1.4); g.closePath(); g.fill();
+    const gr = g.createLinearGradient(-22, 0, 24, 0); gr.addColorStop(0, 'rgba(160,220,255,.2)'); gr.addColorStop(.5, '#d9f1ff'); gr.addColorStop(1, '#ffffff');
+    g.fillStyle = gr; g.fill(); g.lineWidth = 1; g.strokeStyle = OUT; g.stroke();
   }),
-  ring: bake(44, 44, g => {                       // 보체 고리
-    g.lineWidth = 9; g.strokeStyle = OUT; g.beginPath(); g.arc(0, 0, 8, 0, TAU); g.stroke();
+  ring: bake(52, 52, g => {                       // 보체 고리 (막공격복합체)
+    glowDisc(g, 22, [190, 140, 255], .5);
+    g.lineWidth = 8.5; g.strokeStyle = 'rgba(2,8,16,.7)'; g.beginPath(); g.arc(0, 0, 8, 0, TAU); g.stroke();
     g.lineWidth = 5; g.strokeStyle = '#c99bff'; g.stroke();
-    g.lineWidth = 1.6; g.strokeStyle = '#f4e8ff'; g.beginPath(); g.arc(0, 0, 8, Math.PI * 1.1, Math.PI * 1.6); g.stroke();
+    g.lineWidth = 1.5; g.strokeStyle = '#f4e8ff'; g.beginPath(); g.arc(0, 0, 8, Math.PI * 1.1, Math.PI * 1.6); g.stroke();
   }),
   orb: {},
-  pool: bake(100, 100, g => {                     // 독성 웅덩이
+  pool: bake(110, 110, g => {                     // 독성 웅덩이
+    glowDisc(g, 52, [255, 50, 130], .5);
     g.beginPath();
-    for (let i = 0; i <= 36; i++) { const a = i / 36 * TAU, rr = 44 * (1 + .06 * Math.sin(a * 5)); i ? g.lineTo(Math.cos(a) * rr, Math.sin(a) * rr) : g.moveTo(rr, 0); }
-    g.closePath(); g.fillStyle = 'rgba(190,40,130,.42)'; g.fill();
-    g.lineWidth = 3; g.strokeStyle = 'rgba(42,16,48,.65)'; g.stroke();
-    g.fillStyle = 'rgba(255,140,200,.55)'; g.lineWidth = 1.6;
-    for (let i = 0; i < 7; i++) { const a = i * 2.4, d = 8 + (i * 7) % 26; g.beginPath(); g.arc(Math.cos(a) * d, Math.sin(a) * d, 2.6 + i % 3, 0, TAU); g.fill(); g.stroke(); }
+    for (let i = 0; i <= 36; i++) { const a = i / 36 * TAU, rr = 42 * (1 + .07 * Math.sin(a * 5)); i ? g.lineTo(Math.cos(a) * rr, Math.sin(a) * rr) : g.moveTo(rr, 0); }
+    g.closePath(); const gr = g.createRadialGradient(0, 0, 4, 0, 0, 44); gr.addColorStop(0, 'rgba(255,60,140,.55)'); gr.addColorStop(1, 'rgba(120,10,70,.55)');
+    g.fillStyle = gr; g.fill(); g.lineWidth = 1.6; g.strokeStyle = 'rgba(255,130,190,.7)'; g.stroke();
+    g.fillStyle = 'rgba(255,170,210,.6)';
+    for (let i = 0; i < 7; i++) { const a = i * 2.4, d = 8 + (i * 7) % 26; g.beginPath(); g.arc(Math.cos(a) * d, Math.sin(a) * d, 2 + i % 3, 0, TAU); g.fill(); }
   }),
 };
 function orbSprite(col) {
   const k = col.join();
-  return FX.orb[k] || (FX.orb[k] = bake(28, 28, g => {
+  return FX.orb[k] || (FX.orb[k] = bake(34, 34, g => {
+    glowDisc(g, 15, col, .55);
     g.beginPath();
     for (let i = 0; i < 12; i++) { const a = i / 12 * TAU, rr = i % 2 ? 6 : 10; g.lineTo(Math.cos(a) * rr, Math.sin(a) * rr); }
-    g.closePath(); body(g, 10, col, .2);
-    g.fillStyle = '#fff'; g.beginPath(); g.arc(-1.5, -2, 2.2, 0, TAU); g.fill();
+    g.closePath(); body(g, 10, col, .2); shine(g, 10);
   }));
 }
-
-/* ---- 면역세포 (실시간): 플랫 2톤 + 표면 수용체 + 핵이 이동 방향을 향한다 ---- */
+/* ---- 면역세포 (실시간): 후광 + 광택 세포막 + 핵 + 표면 수용체 ---- */
+const CELL_IMG = {};                                      // assets/ 이미지로 교체된 면역세포
 function drawCell(g, x, y, r, look, c, t, fx, fy, alpha, st) {
   g.save(); g.translate(x, y); g.globalAlpha = alpha == null ? 1 : alpha;
   g.lineJoin = 'round'; g.lineCap = 'round';
+  if (CELL_IMG[look]) { const sq = Math.sin(t * 2.5) * .02; g.scale(1 + sq, 1 - sq); g.drawImage(CELL_IMG[look], -r * 1.5, -r * 1.5, r * 3, r * 3); g.restore(); return; }
+  const hg = g.createRadialGradient(0, 0, r * .5, 0, 0, r * 2.9);
+  hg.addColorStop(0, 'rgba(120,232,255,.42)'); hg.addColorStop(.45, 'rgba(120,232,255,.13)'); hg.addColorStop(1, 'rgba(120,232,255,0)');
+  g.fillStyle = hg; g.beginPath(); g.arc(0, 0, r * 2.9, 0, TAU); g.fill();
   const mv = st && st.moving, bob = mv ? Math.sin(t * 12) * .04 : Math.sin(t * 2.5) * .02;
   g.scale(1 + bob, 1 - bob);
-  const fa = Math.atan2(fy, fx), nR = look === 'b' ? 8 : 16, len = look === 'b' ? 1.42 : 1.2;
-  g.strokeStyle = rgbs(mixc(c, -.15)); g.lineWidth = Math.max(1.2, r * .07); g.beginPath();   // 표면 수용체
+  const fa = Math.atan2(fy, fx), nR = look === 'b' ? 8 : 18, len = look === 'b' ? 1.42 : 1.2;
+  g.strokeStyle = rgba(mixc(c, .2), .85); g.lineWidth = Math.max(1.2, r * .06); g.beginPath();   // 표면 수용체
   for (let i = 0; i < nR; i++) { const a = i / nR * TAU + t * .15, ca = Math.cos(a), sa = Math.sin(a); g.moveTo(ca * r * .96, sa * r * .96); g.lineTo(ca * r * len, sa * r * len); }
   g.stroke();
   if (look === 'b') {
-    g.strokeStyle = rgbs(mixc(c, .5)); g.lineWidth = Math.max(1.2, r * .07); g.beginPath();
+    g.beginPath();
     for (let i = 0; i < nR; i++) { const a = i / nR * TAU + t * .15, ca = Math.cos(a), sa = Math.sin(a), tx = ca * r * len, ty = sa * r * len; g.moveTo(tx, ty); g.lineTo(tx + Math.cos(a - .8) * r * .3, ty + Math.sin(a - .8) * r * .3); g.moveTo(tx, ty); g.lineTo(tx + Math.cos(a + .8) * r * .3, ty + Math.sin(a + .8) * r * .3); }
     g.stroke();
   }
   g.beginPath();                                                                                // 세포막
-  const N = 44, lob = look === 'macro' ? 5 : 3, amp = look === 'macro' ? .08 : .025;
+  const N = 48, lob = look === 'macro' ? 5 : 3, amp = look === 'macro' ? .08 : .025;
   for (let i = 0; i <= N; i++) {
     const a = i / N * TAU;
     let rr = r * (1 + amp * Math.sin(a * lob + t * 2.2) + amp * .5 * Math.sin(a * (lob + 3) - t * 2.8));
@@ -1104,92 +1159,128 @@ function drawCell(g, x, y, r, look, c, t, fx, fy, alpha, st) {
     const px = Math.cos(a) * rr, py = Math.sin(a) * rr;
     i ? g.lineTo(px, py) : g.moveTo(px, py);
   }
-  g.closePath(); body(g, r, c, .16); shine(g, r, 1.1, 1.4);
+  g.closePath(); body(g, r, c, .16); shine(g, r);
   const nx = fx * r * .16, ny = fy * r * .16;                                                   // 핵
-  g.fillStyle = 'rgba(14,22,84,.55)';
+  const ng = g.createRadialGradient(nx - r * .1, ny - r * .1, 0, nx, ny, r * .55);
+  ng.addColorStop(0, 'rgba(70,96,200,.85)'); ng.addColorStop(1, 'rgba(10,18,74,.8)');
+  g.fillStyle = ng;
   if (look === 'macro') { g.beginPath(); g.arc(nx - r * .16, ny, r * .34, 0, TAU); g.arc(nx + r * .2, ny + r * .06, r * .3, 0, TAU); g.fill(); }
   else { g.beginPath(); g.arc(nx, ny, look === 't' ? r * .5 : r * .4, 0, TAU); g.fill(); }
-  if (look === 'nk') { g.fillStyle = 'rgba(255,255,255,.85)'; for (let i = 0; i < 7; i++) { const a = i / 7 * TAU + t * .4; g.beginPath(); g.arc(Math.cos(a) * r * .68, Math.sin(a) * r * .68, r * .07, 0, TAU); g.fill(); } }
+  if (look === 'nk') { g.fillStyle = 'rgba(255,255,255,.9)'; for (let i = 0; i < 8; i++) { const a = i / 8 * TAU + t * .4; g.beginPath(); g.arc(Math.cos(a) * r * .68, Math.sin(a) * r * .68, r * .07, 0, TAU); g.fill(); } }
   g.restore();
 }
-/* ---- 구역 배경: 비강 / 폐 / 신경·뇌 (각진 세포 메시 + 헤어라인 디테일) ---- */
-const ZONE_PAL = [   // H&E 염색 조직 슬라이드처럼 밝은 분홍 · 라벤더 · 청회색
-  { bg: [252, 240, 243], c1: [250, 229, 235], c2: [243, 210, 220], line: [222, 170, 186], rbc: [232, 148, 164], acc: [214, 120, 146], nuc: [120, 88, 170] },
-  { bg: [247, 240, 251], c1: [243, 231, 249], c2: [232, 214, 243], line: [200, 170, 224], rbc: [232, 142, 162], acc: [170, 120, 214], nuc: [110, 84, 170] },
-  { bg: [236, 241, 249], c1: [230, 238, 248], c2: [216, 227, 243], line: [160, 180, 218], rbc: [200, 170, 225], acc: [240, 165, 40], nuc: [80, 100, 170] },
+
+/* ---- 구역 배경: 노이즈로 만든 유기 조직 (어두운 시네마틱) ---- */
+const ZONE_PAL = [
+  { c1: [22, 8, 12], c2: [78, 28, 34], vein: [200, 84, 92], acc: [255, 150, 140], rbc: [150, 26, 40] },
+  { c1: [14, 8, 28], c2: [52, 30, 86], vein: [150, 112, 224], acc: [190, 150, 255], rbc: [140, 30, 64] },
+  { c1: [3, 14, 24], c2: [10, 46, 62], vein: [70, 206, 226], acc: [255, 200, 90], rbc: [100, 50, 126] },
 ];
-function meshTile(g, size, n, P, lw, jit, k0, k1) {          // 이음새 없는 지터 격자 → 상피 세포 시트
-  const s = size / n, pts = [];
-  for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) pts.push([i * s + (Math.random() - .5) * 2 * jit * s, j * s + (Math.random() - .5) * 2 * jit * s]);
-  const at = (i, j) => { const ii = ((i % n) + n) % n, jj = ((j % n) + n) % n, p = pts[jj * n + ii]; return [p[0] + (i - ii) * s, p[1] + (j - jj) * s]; };
-  g.lineJoin = 'round';
-  for (let j = -1; j <= n; j++) for (let i = -1; i <= n; i++) {
-    const a = at(i, j), b = at(i + 1, j), c = at(i + 1, j + 1), d = at(i, j + 1);
-    const k = k0 + Math.random() * (k1 - k0);
-    g.fillStyle = rgbs(P.c1.map((v, q) => Math.round(v + (P.c2[q] - v) * k)));
-    g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); g.lineTo(c[0], c[1]); g.lineTo(d[0], d[1]); g.closePath(); g.fill();
-    g.lineWidth = lw; g.strokeStyle = rgba(P.line, .55); g.stroke();
-    if (lw > 1 && Math.random() < .55) { g.fillStyle = rgba(P.nuc, .3); g.beginPath(); g.ellipse((a[0] + c[0]) / 2, (a[1] + c[1]) / 2 + s * .12, s * .09, s * .06, 0, 0, TAU); g.fill(); }
+function mulberry(seed) { let s = seed >>> 0; return () => { s = (s + 0x6D2B79F5) >>> 0; let t = Math.imul(s ^ (s >>> 15), 1 | s); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+function fbm(size, cells, oct, seed) {                 // 이음새 없는 value-noise fBm
+  const R = mulberry(seed), out = new Float32Array(size * size); let amp = 1, tot = 0;
+  for (let o = 0; o < oct; o++) {
+    const f = cells << o, lat = new Float32Array(f * f);
+    for (let i = 0; i < lat.length; i++) lat[i] = R();
+    for (let y = 0; y < size; y++) {
+      const v = y / size * f, j0 = Math.floor(v), fv = v - j0, sv = fv * fv * (3 - 2 * fv), jj = j0 % f, j1 = (j0 + 1) % f;
+      for (let x = 0; x < size; x++) {
+        const u = x / size * f, i0 = Math.floor(u), fu = u - i0, su = fu * fu * (3 - 2 * fu), ii = i0 % f, i1 = (i0 + 1) % f;
+        const a = lat[jj * f + ii], b = lat[jj * f + i1], c = lat[j1 * f + ii], d = lat[j1 * f + i1];
+        const top = a + (b - a) * su, bot = c + (d - c) * su;
+        out[y * size + x] += amp * (top + (bot - top) * sv);
+      }
+    }
+    tot += amp; amp *= .5;
   }
+  for (let i = 0; i < out.length; i++) out[i] /= tot;
+  return out;
 }
 function bakeZone(zi) {
-  const P = ZONE_PAL[zi];
+  const P = ZONE_PAL[zi], S = 256, F = 1024, N = 1024, RES = 1.25;
   const wrap = (g, size, fn) => { for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) { g.save(); g.translate(dx * size, dy * size); fn(); g.restore(); } };
-  const R = (a, b) => a + Math.random() * (b - a);
-  const F = 880, far = mkCanvas(F, F), fg = far.getContext('2d');
-  fg.fillStyle = rgbs(P.bg); fg.fillRect(0, 0, F, F);
-  fg.globalAlpha = .9; meshTile(fg, F, 4, P, 1.5, .2, 0, .5); fg.globalAlpha = 1;
-  fg.fillStyle = rgba(P.bg, .45); fg.fillRect(0, 0, F, F);
-  const N = 1024, RES = 1.2, near = mkCanvas(N * RES, N * RES), g = near.getContext('2d');
+  const Rn = (a, b) => a + Math.random() * (b - a);
+  // 먼 층: 어두운 조직 질감 + 큰 흐린 세포 덩어리
+  const n1 = fbm(S, 3, 5, zi * 31 + 3), n2 = fbm(S, 5, 4, zi * 31 + 11), n3 = fbm(S, 8, 3, zi * 31 + 19);
+  const base = mkCanvas(S, S), bg = base.getContext('2d'), img = bg.createImageData(S, S);
+  for (let i = 0; i < S * S; i++) {
+    const n = n1[i], k = n * n * (3 - 2 * n), ridge = Math.pow(1 - Math.abs(n2[i] * 2 - 1), 6), m = .55 + .45 * n3[i];
+    for (let q = 0; q < 3; q++) img.data[i * 4 + q] = Math.min(255, (P.c1[q] + (P.c2[q] - P.c1[q]) * k) * m + P.vein[q] * ridge * .2);
+    img.data[i * 4 + 3] = 255;
+  }
+  bg.putImageData(img, 0, 0);
+  const far = mkCanvas(F, F), fg = far.getContext('2d');
+  fg.imageSmoothingEnabled = true; fg.drawImage(base, 0, 0, F, F);
+  for (let i = 0; i < 14; i++) {
+    const x = Rn(0, F), y = Rn(0, F), r = Rn(90, 220);
+    wrap(fg, F, () => { const gr = fg.createRadialGradient(x, y, r * .2, x, y, r); gr.addColorStop(0, rgba(P.vein, .05)); gr.addColorStop(.8, rgba(P.vein, .1)); gr.addColorStop(1, rgba(P.vein, 0)); fg.fillStyle = gr; fg.beginPath(); fg.arc(x, y, r, 0, TAU); fg.fill(); });
+  }
+  // 가까운 층: 혈관 망(릿지 노이즈) + 광택 디테일, 투명 배경
+  const near = mkCanvas(N * RES, N * RES), g = near.getContext('2d');
+  const S2 = 512, v2 = fbm(S2, 5, 4, zi * 31 + 27), vc = mkCanvas(S2, S2), vg = vc.getContext('2d'), vi = vg.createImageData(S2, S2);
+  for (let i = 0; i < S2 * S2; i++) {
+    const ridge = Math.pow(1 - Math.abs(v2[i] * 2 - 1), 9);
+    vi.data[i * 4] = P.vein[0]; vi.data[i * 4 + 1] = P.vein[1]; vi.data[i * 4 + 2] = P.vein[2]; vi.data[i * 4 + 3] = Math.min(255, ridge * 190);
+  }
+  vg.putImageData(vi, 0, 0);
+  g.imageSmoothingEnabled = true; g.drawImage(vc, 0, 0, N * RES, N * RES);
   g.scale(RES, RES); g.lineJoin = 'round'; g.lineCap = 'round';
-  g.fillStyle = rgbs(P.bg); g.fillRect(0, 0, N, N);
-  meshTile(g, N, 8, P, 1.3, .22, 0, 1);
-  const rbc = (x, y, r, rot) => wrap(g, N, () => {
-    g.save(); g.translate(x, y); g.rotate(rot); g.scale(1, .86);
-    g.fillStyle = rgba(P.rbc, .8); g.beginPath(); g.arc(0, 0, r, 0, TAU); g.fill();
-    g.fillStyle = 'rgba(150,30,60,.16)'; g.beginPath(); g.ellipse(0, 0, r * .52, r * .4, 0, 0, TAU); g.fill();
-    g.strokeStyle = 'rgba(150,30,60,.28)'; g.lineWidth = 1.4; g.beginPath(); g.arc(0, 0, r, 0, TAU); g.stroke();
+  const rbc = (x, y, r, rot, a) => wrap(g, N, () => {
+    g.save(); g.translate(x, y); g.rotate(rot); g.scale(1, .82);
+    const gr = g.createRadialGradient(0, 0, r * .1, 0, 0, r);
+    gr.addColorStop(0, rgba(mixc(P.rbc, -.6), a)); gr.addColorStop(.45, rgba(mixc(P.rbc, -.15), a)); gr.addColorStop(.85, rgba(mixc(P.rbc, .22), a)); gr.addColorStop(1, rgba(mixc(P.rbc, -.35), a));
+    g.fillStyle = gr; g.beginPath(); g.arc(0, 0, r, 0, TAU); g.fill();
+    g.strokeStyle = `rgba(255,190,190,${.3 * a})`; g.lineWidth = 1.5; g.beginPath(); g.arc(0, 0, r * .9, Math.PI * 1.05, Math.PI * 1.45); g.stroke();
     g.restore();
+  });
+  const strand = (x, y, len, col, a) => wrap(g, N, () => {          // 섬유 가닥(발광)
+    const ex = x + Rn(-len, len), ey = y + Rn(-len, len), cx = (x + ex) / 2 + Rn(-60, 60), cy = (y + ey) / 2 + Rn(-60, 60);
+    g.strokeStyle = rgba(col, a * .4); g.lineWidth = 4; g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo(cx, cy, ex, ey); g.stroke();
+    g.strokeStyle = rgba(mixc(col, .4), a); g.lineWidth = 1.2; g.stroke();
   });
   if (zi === 0) {
     for (let i = 0; i < 12; i++) {                       // 점액 방울
-      const x = R(0, N), y = R(0, N), r = R(14, 36);
-      wrap(g, N, () => { g.strokeStyle = rgba(P.acc, .4); g.lineWidth = 1.5; g.beginPath(); g.arc(x, y, r, 0, TAU); g.stroke(); g.strokeStyle = 'rgba(255,255,255,.4)'; g.beginPath(); g.arc(x, y, r * .7, Math.PI * 1.1, Math.PI * 1.4); g.stroke(); });
+      const x = Rn(0, N), y = Rn(0, N), r = Rn(12, 34);
+      wrap(g, N, () => { const gr = g.createRadialGradient(x - r * .3, y - r * .3, r * .1, x, y, r); gr.addColorStop(0, 'rgba(255,230,225,.14)'); gr.addColorStop(1, 'rgba(255,150,140,.04)'); g.fillStyle = gr; g.beginPath(); g.arc(x, y, r, 0, TAU); g.fill(); g.strokeStyle = 'rgba(255,190,180,.35)'; g.lineWidth = 1.3; g.stroke(); g.strokeStyle = 'rgba(255,255,255,.5)'; g.beginPath(); g.arc(x, y, r * .72, Math.PI * 1.1, Math.PI * 1.42); g.stroke(); });
     }
     for (let i = 0; i < 10; i++) {                       // 섬모
-      const x = R(0, N), y = R(0, N);
-      wrap(g, N, () => { g.strokeStyle = rgba(P.acc, .36); g.lineWidth = 1.5; for (let k = -3; k <= 3; k++) { g.beginPath(); g.moveTo(x + k * 6, y); g.lineTo(x + k * 8, y - 26 - (k % 2) * 6); g.stroke(); } });
+      const x = Rn(0, N), y = Rn(0, N);
+      wrap(g, N, () => { for (let k = -3; k <= 3; k++) { g.strokeStyle = 'rgba(255,170,160,.18)'; g.lineWidth = 3.4; g.beginPath(); g.moveTo(x + k * 6, y); g.quadraticCurveTo(x + k * 9, y - 16, x + k * 12 + 6, y - 30); g.stroke(); g.strokeStyle = 'rgba(255,210,200,.5)'; g.lineWidth = 1; g.stroke(); } });
     }
-    for (let i = 0; i < 7; i++) rbc(R(0, N), R(0, N), R(18, 26), R(0, TAU));
+    for (let i = 0; i < 6; i++) strand(Rn(0, N), Rn(0, N), 140, P.acc, .3);
+    for (let i = 0; i < 7; i++) rbc(Rn(0, N), Rn(0, N), Rn(17, 25), Rn(0, TAU), .85);
   } else if (zi === 1) {
     for (let i = 0; i < 6; i++) {                        // 폐포 송이
-      const cx = R(0, N), cy = R(0, N);
+      const cx = Rn(0, N), cy = Rn(0, N);
       for (let k = 0; k < 6; k++) {
-        const a = k / 6 * TAU + R(-.3, .3), d = R(18, 54), r = R(24, 42), x = cx + Math.cos(a) * d, y = cy + Math.sin(a) * d;
-        wrap(g, N, () => { g.fillStyle = rgba(P.bg, .35); g.beginPath(); g.arc(x, y, r, 0, TAU); g.fill(); g.strokeStyle = rgba(P.acc, .42); g.lineWidth = 1.6; g.stroke(); });
+        const a = k / 6 * TAU + Rn(-.3, .3), d = Rn(18, 54), r = Rn(24, 42), x = cx + Math.cos(a) * d, y = cy + Math.sin(a) * d;
+        wrap(g, N, () => { const gr = g.createRadialGradient(x, y, r * .5, x, y, r); gr.addColorStop(0, 'rgba(10,4,24,.35)'); gr.addColorStop(1, 'rgba(170,130,255,.2)'); g.fillStyle = gr; g.beginPath(); g.arc(x, y, r, 0, TAU); g.fill(); g.strokeStyle = 'rgba(200,170,255,.45)'; g.lineWidth = 1.5; g.stroke(); });
       }
     }
-    for (let i = 0; i < 7; i++) {                        // 모세혈관
-      const x = R(0, N), y = R(0, N), ex = x + R(-150, 150), ey = y + R(-150, 150), mx = (x + ex) / 2 + R(-40, 40), my = (y + ey) / 2 + R(-40, 40);
-      wrap(g, N, () => { g.strokeStyle = rgba(P.rbc, .55); g.lineWidth = 3; g.beginPath(); g.moveTo(x, y); g.lineTo(mx, my); g.lineTo(ex, ey); g.stroke(); });
+    for (let i = 0; i < 7; i++) {                        // 모세혈관 튜브
+      const x = Rn(0, N), y = Rn(0, N), ex = x + Rn(-150, 150), ey = y + Rn(-150, 150), mx = (x + ex) / 2 + Rn(-40, 40), my = (y + ey) / 2 + Rn(-40, 40);
+      wrap(g, N, () => { for (const [w, col] of [[8, 'rgba(40,4,16,.6)'], [5, 'rgba(150,30,60,.65)'], [1.6, 'rgba(255,150,170,.5)']]) { g.strokeStyle = col; g.lineWidth = w; g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo(mx, my, ex, ey); g.stroke(); } });
     }
-    for (let i = 0; i < 6; i++) rbc(R(0, N), R(0, N), R(18, 26), R(0, TAU));
+    for (let i = 0; i < 5; i++) strand(Rn(0, N), Rn(0, N), 120, P.acc, .28);
+    for (let i = 0; i < 6; i++) rbc(Rn(0, N), Rn(0, N), Rn(17, 25), Rn(0, TAU), .85);
   } else {
     for (let i = 0; i < 8; i++) {                        // 뉴런
-      const x = R(0, N), y = R(0, N), r = R(14, 22);
+      const x = Rn(0, N), y = Rn(0, N), r = Rn(13, 20);
       wrap(g, N, () => {
-        const nd = 5 + Math.floor(R(0, 3));
+        const nd = 5 + Math.floor(Rn(0, 3));
         for (let k = 0; k < nd; k++) {
-          const a = k / nd * TAU + R(-.3, .3), L = R(70, 160), mx = x + Math.cos(a) * L * .55, my = y + Math.sin(a) * L * .55, ex = mx + Math.cos(a + R(-.7, .7)) * L * .5, ey = my + Math.sin(a + R(-.7, .7)) * L * .5;
-          g.strokeStyle = rgba(P.nuc, .4); g.lineWidth = 1.6; g.beginPath(); g.moveTo(x, y); g.lineTo(mx, my); g.lineTo(ex, ey); g.stroke();
-          g.fillStyle = rgba(P.acc, .85); g.beginPath(); g.arc(ex, ey, 3, 0, TAU); g.fill();
+          const a = k / nd * TAU + Rn(-.3, .3), L = Rn(70, 170), mx = x + Math.cos(a) * L * .55, my = y + Math.sin(a) * L * .55, ex = mx + Math.cos(a + Rn(-.8, .8)) * L * .5, ey = my + Math.sin(a + Rn(-.8, .8)) * L * .5;
+          g.strokeStyle = rgba(P.vein, .2); g.lineWidth = 4; g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo(mx, my, ex, ey); g.stroke();
+          g.strokeStyle = rgba(mixc(P.vein, .35), .7); g.lineWidth = 1.2; g.stroke();
+          const sg = g.createRadialGradient(ex, ey, 0, ex, ey, 9); sg.addColorStop(0, rgba(P.acc, .85)); sg.addColorStop(1, rgba(P.acc, 0)); g.fillStyle = sg; g.beginPath(); g.arc(ex, ey, 9, 0, TAU); g.fill();
         }
-        g.beginPath(); for (let k = 0; k < 6; k++) { const a = k / 6 * TAU, rr = r * (.85 + .2 * ((k * 7) % 3) / 2); k ? g.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr) : g.moveTo(x + rr, y); }
-        g.closePath(); g.fillStyle = rgba(P.nuc, .45); g.fill(); g.strokeStyle = rgba(P.nuc, .8); g.lineWidth = 1.6; g.stroke();
+        const sg = g.createRadialGradient(x - r * .3, y - r * .3, 0, x, y, r * 1.6); sg.addColorStop(0, 'rgba(160,230,245,.7)'); sg.addColorStop(.5, rgba(P.vein, .45)); sg.addColorStop(1, rgba(P.vein, 0));
+        g.fillStyle = sg; g.beginPath(); g.arc(x, y, r * 1.6, 0, TAU); g.fill();
       });
     }
-    for (let i = 0; i < 22; i++) { const x = R(0, N), y = R(0, N); g.fillStyle = rgba(P.acc, .5); g.fillRect(x - 1.5, y - 1.5, 3, 3); }
-    for (let i = 0; i < 3; i++) rbc(R(0, N), R(0, N), R(18, 24), R(0, TAU));
+    for (let i = 0; i < 24; i++) { const x = Rn(0, N), y = Rn(0, N); const sg = g.createRadialGradient(x, y, 0, x, y, 5); sg.addColorStop(0, rgba(P.acc, .8)); sg.addColorStop(1, rgba(P.acc, 0)); g.fillStyle = sg; g.beginPath(); g.arc(x, y, 5, 0, TAU); g.fill(); }
+    for (let i = 0; i < 4; i++) strand(Rn(0, N), Rn(0, N), 130, P.vein, .3);
+    for (let i = 0; i < 3; i++) rbc(Rn(0, N), Rn(0, N), Rn(17, 23), Rn(0, TAU), .75);
   }
   return { far, F, near, N };
 }
@@ -1475,7 +1566,7 @@ function hurt(dmg, inv) {
   const d = Math.max(1, Math.round(dmg - P.armor));
   P.hp -= d; P.inv = inv || .5; P.hurtT = .35;
   G.shake = Math.max(G.shake, 7);
-  addNum(P.x, P.y - 18, d, false, '#e5384a');
+  addNum(P.x, P.y - 18, d, false, '#ff5a5a');
   burst(P.x, P.y, '#ff9ec7', 10, 150, 2.4);
   hurtFlash(); Sfx.hurt();
   if (P.hp <= 0) die();
@@ -1484,7 +1575,7 @@ function hurt(dmg, inv) {
 function die() {
   if (P.revive > 0) {
     P.revive--; P.hp = P.maxHp * .5; P.inv = 2.2;
-    ring(P.x, P.y, 460, '#2f6fed', .7, 5);
+    ring(P.x, P.y, 460, '#7fe8ff', .7, 5);
     for (const e of enemies) {
       if (e.dead) continue;
       const dx = e.x - P.x, dy = e.y - P.y;
@@ -1518,8 +1609,8 @@ function damageEnemy(e, dmg, kx, ky, quiet) {
   e.hp -= dmg; e.flash = .08; e.hitBar = 2;
   const kb = e.boss ? .12 : 1;
   e.kx += (kx || 0) * kb; e.ky += (ky || 0) * kb;
-  if (!quiet) addNum(e.x + rand(-6, 6), e.y - e.r, dmg, crit, blocked ? '#8a929e' : null, blocked);
-  else if (parts.length < 380) parts.push({ x: e.x, y: e.y, vx: rand(-40, 40), vy: rand(-40, 40), life: .2, max: .2, size: 2.4, c: '#334155' });
+  if (!quiet) addNum(e.x + rand(-6, 6), e.y - e.r, dmg, crit, blocked ? '#8fa0b2' : null, blocked);
+  else if (parts.length < 380) parts.push({ x: e.x, y: e.y, vx: rand(-40, 40), vy: rand(-40, 40), life: .2, max: .2, size: 2.4, c: '#dff6ff' });
   Sfx.hit();
   if (e.hp <= 0) killEnemy(e);
 }
@@ -1529,7 +1620,7 @@ function killEnemy(e) {
   const def = e.def;
   G.kills++; G.tk[def.tier]++;
   burst(e.x, e.y, css(def.col), e.boss ? 34 : 8, e.boss ? 260 : 130, e.boss ? 3.6 : 2.6);
-  ring(e.x, e.y, e.boss ? 160 : e.r * 2.2, '#23304a', .25, 2);
+  ring(e.x, e.y, e.boss ? 160 : e.r * 2.2, 'rgba(255,255,255,.9)', .25, 2);
   Sfx.kill();
   if (e.boss) {
     ring(e.x, e.y, 340, css(def.col), .8, 7);
@@ -2180,7 +2271,7 @@ function resize() {
   vignette = mkCanvas(cv.width, cv.height);
   const g = vignette.getContext('2d'), w = cv.width, h = cv.height;
   const gr = g.createRadialGradient(w / 2, h / 2, Math.min(w, h) * .4, w / 2, h / 2, Math.hypot(w, h) * .56);
-  gr.addColorStop(0, 'rgba(20,4,30,0)'); gr.addColorStop(1, 'rgba(20,4,30,.6)');
+  gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(1, 'rgba(0,0,0,.84)');
   g.fillStyle = gr; g.fillRect(0, 0, w, h);
 }
 function setCamera(sx, sy) {
@@ -2353,57 +2444,135 @@ function drawWorld(g) {
     const k = r.t / r.life, rr = 4 + (r.max - 4) * (1 - Math.pow(1 - k, 2));
     toonRing(g, r.x, r.y, rr, r.c, r.w * (1 - k * .5), (1 - k) * .95);
   }
-  g.textAlign = 'center'; g.lineJoin = 'round'; g.strokeStyle = '#ffffff';
+  g.textAlign = 'center'; g.lineJoin = 'round'; g.strokeStyle = 'rgba(0,0,0,.9)';
   for (const n of nums) {
     g.globalAlpha = clamp(1 - n.t / .7, 0, 1);
     g.font = (n.crit ? '900 24px' : n.small ? '700 13px' : '900 16px') + ' "Noto Sans KR",sans-serif';
     g.lineWidth = 4; g.strokeText(n.v, n.x, n.y);
-    g.fillStyle = n.c || (n.crit ? '#d97200' : '#0e1218'); g.fillText(n.v, n.x, n.y);
+    g.fillStyle = n.c || (n.crit ? '#ffd23a' : '#ffffff'); g.fillText(n.v, n.x, n.y);
   }
   g.globalAlpha = 1;
 }
 
-/* 메인 화면: 선택한 면역세포가 스스로 싸우는 자동 시연을 우측 스테이지에 보여준다 */
-let stageC = { x: 0, y: 0 };
-function layoutStage() {
-  const st = $('#mnStage'); if (!st) return;
-  const r = st.getBoundingClientRect();
-  stageC = { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+/* ---- 연출: 빛줄기 · 부유 입자 · 필름 그레인 · 비네트 · 저체력 심박 ---- */
+const ZONE_TINT = ['255,170,150', '190,150,255', '130,230,255'];
+let GRAINC = null, grainPat = null;
+const motes = [];
+function initAtmos() {
+  GRAINC = mkCanvas(180, 180);
+  const gg = GRAINC.getContext('2d'), id = gg.createImageData(180, 180);
+  for (let i = 0; i < 180 * 180; i++) { const v = Math.random() * 255 | 0; id.data[i * 4] = id.data[i * 4 + 1] = id.data[i * 4 + 2] = v; id.data[i * 4 + 3] = 255; }
+  gg.putImageData(id, 0, 0);
+  for (let i = 0; i < 70; i++) motes.push({ x: Math.random(), y: Math.random(), z: rand(.35, 1.9), vx: rand(-.004, .004), vy: rand(-.006, .002), ph: rand(0, TAU), s: rand(1.2, 3.2) });
 }
-const DEMO_STARTS = [45, 160, 292];
-let demoIdx = 0;
-function beginDemo() {
-  DEMO_MUTE = true;
-  startDemo(save.char, DEMO_STARTS[demoIdx++ % DEMO_STARTS.length]);
-  const lv = $('#liveName'); if (lv) lv.textContent = `${CHARS[save.char].ko} · ${ZONES[G.zone].ko}`;
-}
-function stepDemo(rdt) {
-  if (!G || !G.demo) return;
-  demoAcc += rdt;
-  let n = 0;
-  while (demoAcc >= STEP && n < 5) {
-    update(STEP); demoAcc -= STEP; n++;
-    while (G.pending > 0) { G.pending--; const ch = buildChoices(false); applyChoice(ch[randi(0, ch.length - 1)]); }
+function drawParticles(g, t, front, tint) {
+  g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'lighter';
+  for (const p of motes) {
+    if ((p.z > 1) !== front) continue;
+    const px = (((p.x + t * p.vx * .6 - cam.x * p.z * .00045) % 1) + 1) % 1, py = (((p.y + t * p.vy * .6 - cam.y * p.z * .00045) % 1) + 1) % 1;
+    const sx = px * cv.width, sy = py * cv.height, r = p.s * p.z * DPR * (front ? 3.4 : 1.7), a = (front ? .16 : .3) * (.6 + .4 * Math.sin(t * 1.3 + p.ph));
+    const gr = g.createRadialGradient(sx, sy, 0, sx, sy, r);
+    gr.addColorStop(0, `rgba(${tint},${a})`); gr.addColorStop(1, `rgba(${tint},0)`);
+    g.fillStyle = gr; g.beginPath(); g.arc(sx, sy, r, 0, TAU); g.fill();
   }
-  if (n >= 5) demoAcc = 0;
-  if (G.t > G.demoEnd) beginDemo();
+  g.restore();
 }
-let demoAcc = 0;
-function renderDemo(g) {
-  if (!G || !G.demo) { g.setTransform(1, 0, 0, 1, 0, 0); g.fillStyle = '#f5f6f8'; g.fillRect(0, 0, cv.width, cv.height); return; }
-  setCamera(-(stageC.x - W / 2) / VS, -(stageC.y - H / 2) / VS);
-  drawBackground(g, G.zone, G.zone, 1);
-  drawWorld(g);
+function drawShafts(g, t, tint) {
+  const w = cv.width, h = cv.height;
+  g.save(); g.globalCompositeOperation = 'lighter';
+  for (let i = 0; i < 3; i++) {
+    const x = w * (.18 + .3 * i) + Math.sin(t * .07 + i * 2.1) * w * .08, bw = w * (.1 + .03 * i);
+    const gr = g.createLinearGradient(x - bw, 0, x + bw, 0);
+    gr.addColorStop(0, `rgba(${tint},0)`); gr.addColorStop(.5, `rgba(${tint},${.05 + .015 * Math.sin(t * .5 + i)})`); gr.addColorStop(1, `rgba(${tint},0)`);
+    g.setTransform(1, 0, -.55, 1, h * .3, 0); g.fillStyle = gr; g.fillRect(x - bw, -h * .2, bw * 2, h * 1.4);
+  }
+  g.restore();
+}
+function drawAtmos(g, t, zone, lowHp) {
+  drawShafts(g, t, ZONE_TINT[zone]);
   g.setTransform(1, 0, 0, 1, 0, 0);
-}function drawJoystick(g) {
+  g.drawImage(vignette, 0, 0);
+  if (lowHp > 0) {                                      // 저체력: 심박에 맞춰 붉게 맥동
+    const beat = Math.pow(Math.max(0, Math.sin(t * (4.5 + lowHp * 5))), 6), w = cv.width, h = cv.height;
+    const gr = g.createRadialGradient(w / 2, h / 2, Math.min(w, h) * .3, w / 2, h / 2, Math.hypot(w, h) * .6);
+    gr.addColorStop(0, 'rgba(200,0,0,0)'); gr.addColorStop(1, `rgba(210,12,12,${(.16 + .36 * beat) * lowHp})`);
+    g.fillStyle = gr; g.fillRect(0, 0, w, h);
+  }
+  if (!grainPat) grainPat = g.createPattern(GRAINC, 'repeat');
+  g.save(); g.setTransform(1, 0, 0, 1, -((Math.random() * 180) | 0), -((Math.random() * 180) | 0));
+  g.globalAlpha = .06; g.globalCompositeOperation = 'overlay'; g.fillStyle = grainPat; g.fillRect(0, 0, cv.width + 180, cv.height + 180);
+  g.restore();
+}
+
+/* ---- 타이틀 장면: 큰 면역세포 + 심연 속을 떠다니는 병원체 ---- */
+const titleHero = { id: null, t0: 0 };
+const titleFloaters = [], BLUR = {};
+function initTitle() {
+  for (let i = 0; i < 16; i++) titleFloaters.push({ key: VIRUS_ORDER[i % VIRUS_ORDER.length], x: Math.random(), y: Math.random(), z: rand(.5, 1.9), vx: rand(-.006, .006), vy: rand(-.004, .004), rot: rand(0, TAU), spin: rand(-.2, .2) });
+}
+function blurred(key, px) {
+  const id = key + px; if (BLUR[id]) return BLUR[id];
+  const s = SPR[key], c = mkCanvas(s.c.width + px * 8, s.c.height + px * 8), g2 = c.getContext('2d');
+  if ('filter' in g2) g2.filter = `blur(${px}px)`;
+  g2.drawImage(s.c, px * 4, px * 4);
+  return (BLUR[id] = { c, w: s.w + px * 8 / SS, h: s.h + px * 8 / SS });
+}
+function titleFloat(g, t, front) {
+  const w = cv.width, h = cv.height;
+  for (const f of titleFloaters) {
+    const isFront = f.z > 1.25;
+    if (isFront !== front) continue;
+    const sx = (((f.x + t * f.vx) % 1) + 1) % 1 * w, sy = (((f.y + t * f.vy) % 1) + 1) % 1 * h;
+    const sc = f.z * DPR * (H / 900) * (isFront ? 1.5 : 1), spr = (isFront || f.z < .7) ? blurred(f.key, isFront ? 7 : 3) : SPR[f.key];
+    g.save(); g.setTransform(1, 0, 0, 1, sx, sy); g.rotate(f.rot + t * f.spin);
+    g.globalAlpha = isFront ? .5 : .45 + .22 * f.z;
+    g.drawImage(spr.c, -spr.w * sc / 2, -spr.h * sc / 2, spr.w * sc, spr.h * sc);
+    g.restore();
+  }
+}
+function renderTitle(g, now) {
+  const t = now / 1000, w = cv.width, h = cv.height;
+  cam.x = t * 16; cam.y = Math.sin(t * .07) * 140;
+  setCamera(0, 0);
+  const a = Math.floor(t / 16) % 3, b = (a + 1) % 3, f = clamp((t % 16 - 13) / 3, 0, 1), zone = f > .5 ? b : a;
+  drawBackground(g, a, b, f);
+  drawParticles(g, t, false, ZONE_TINT[zone]);
+  titleFloat(g, t, false);
+  const mob = W < 900, hx = mob ? w * .8 : w * .72, hy = mob ? h * .2 : h * .35;
+  const hr = mob ? Math.min(W * .14, H * .075) : Math.min(H * .14, W * .1);
+  const ch = CHARS[save.char];
+  if (titleHero.id !== save.char) { titleHero.id = save.char; titleHero.t0 = t; }
+  const k = clamp((t - titleHero.t0) / .6, 0, 1), ease = 1 - Math.pow(1 - k, 3);
+  g.setTransform(1, 0, 0, 1, 0, 0);
+  const cone = g.createRadialGradient(hx, hy, 0, hx, hy, hr * DPR * 6);
+  cone.addColorStop(0, 'rgba(110,225,255,.24)'); cone.addColorStop(1, 'rgba(110,225,255,0)');
+  g.fillStyle = cone; g.fillRect(0, 0, w, h);
+  const bob = Math.sin(t * 1.4) * 8;
+  g.setTransform(DPR, 0, 0, DPR, hx, hy + bob * DPR);
+  g.scale(.45 + .55 * ease, .45 + .55 * ease);
+  drawCell(g, 0, 0, hr, ch.look, ch.col, t, Math.cos(t * .5), Math.sin(t * .5) * .3, ease, { moving: false });
+  for (let i = 0; i < 3; i++) {                           // 궤도를 도는 항체
+    const an = t * .9 + i * TAU / 3, ox = Math.cos(an) * hr * 2.2, oy = Math.sin(an) * hr * .95, s = FX.ab;
+    g.save(); g.translate(ox, oy); g.rotate(an + Math.PI / 2); g.globalAlpha = .9 * ease;
+    g.drawImage(s.c, -s.w * 1.5 / 2, -s.h * 1.5 / 2, s.w * 1.5, s.h * 1.5); g.restore();
+  }
+  g.setTransform(1, 0, 0, 1, 0, 0);
+  titleFloat(g, t, true);
+  drawParticles(g, t, true, ZONE_TINT[zone]);
+  drawAtmos(g, t, zone, 0);
+}
+function layoutStage() {}
+function beginDemo() {}
+function stepDemo() {}
+let demoAcc = 0;function drawJoystick(g) {
   if (!joy.on) return;
   const R = 56 * DPR;
   g.setTransform(1, 0, 0, 1, 0, 0);
-  g.lineWidth = 2 * DPR; g.strokeStyle = 'rgba(14,18,24,.55)'; g.fillStyle = 'rgba(14,18,24,.06)';
+  g.lineWidth = 2 * DPR; g.strokeStyle = 'rgba(255,255,255,.5)'; g.fillStyle = 'rgba(255,255,255,.07)';
   g.beginPath(); g.arc(joy.sx * DPR, joy.sy * DPR, R, 0, TAU); g.fill(); g.stroke();
   let kx = joy.px - joy.sx, ky = joy.py - joy.sy; const d = Math.hypot(kx, ky);
   if (d > 56) { kx = kx / d * 56; ky = ky / d * 56; }
-  g.fillStyle = 'rgba(14,18,24,.4)'; g.beginPath(); g.arc((joy.sx + kx) * DPR, (joy.sy + ky) * DPR, 22 * DPR, 0, TAU); g.fill();
+  g.fillStyle = 'rgba(255,255,255,.4)'; g.beginPath(); g.arc((joy.sx + kx) * DPR, (joy.sy + ky) * DPR, 22 * DPR, 0, TAU); g.fill();
 }
 function drawBossArrows(g) {
   g.setTransform(1, 0, 0, 1, 0, 0);
@@ -2422,12 +2591,15 @@ function drawBossArrows(g) {
 }
 function render(now, dt) {
   const g = ctx;
-  if (!G || G.demo || mode === 'menu' || mode === 'lab' || mode === 'dex') { renderDemo(g); return; }
+  if (!G || mode === 'menu' || mode === 'lab' || mode === 'dex') { renderTitle(g, now); return; }
   const sh = REDUCE ? 0 : G.shake;
   setCamera(sh ? (Math.random() - .5) * sh : 0, sh ? (Math.random() - .5) * sh : 0);
   drawBackground(g, G.zf >= 1 ? G.zone : G.prevZone, G.zone, G.zf);
+  drawParticles(g, G.t, false, ZONE_TINT[G.zone]);
   drawWorld(g);
+  drawParticles(g, G.t, true, ZONE_TINT[G.zone]);
   g.setTransform(1, 0, 0, 1, 0, 0);
+  drawAtmos(g, G.t, G.zone, P ? clamp((.4 - P.hp / P.maxHp) / .4, 0, 1) : 0);
   drawBossArrows(g);
   drawJoystick(g);
 }
@@ -2440,7 +2612,7 @@ const el = {
   xp: $('#xpfill'), hp: $('#hpfill'), ghost: $('#hpghost'), hptxt: $('#hptxt'), lv: $('#lv'), timer: $('#timerTxt'), kill: $('#killn'),
   tiers: $$('#tiers .tier'), wslots: $('#wslots'), pslots: $('#pslots'), bossbar: $('#bossbar'), bossname: $('#bossname'),
   bosssub: $('#bosssub'), bossfill: $('#bossfill'), banner: $('#banner'), warn: $('#warn'), toasts: $('#toasts'), hint: $('#hint'),
-  hurt: $('#hurt'), nextboss: $('#nextboss'), vTemp: $('#vTemp'), vLoad: $('#vLoad'), vTiter: $('#vTiter'), vSpark: $('#vSpark'), zone: $('#zone'), status: $('#status'),
+  hurt: $('#hurt'), hpState: $('#hpState'), ecg: $('#ecg'), nextboss: $('#nextboss'), vTemp: $('#vTemp'), vLoad: $('#vLoad'), vTiter: $('#vTiter'), vSpark: $('#vSpark'), zone: $('#zone'), status: $('#status'),
 };
 const hc = {};
 function setTxt(node, key, v) { if (hc[key] !== v) { hc[key] = v; node.textContent = v; } }
@@ -2500,6 +2672,40 @@ function resetHud() {
   el.tiers.forEach((n, i) => n.classList.toggle('lit', i === 0));
   ['rhino', 'flu', 'rabies'].forEach((k, i) => fitSprite($('canvas', el.tiers[i]), SPR[k]));
 }
+/* HP는 심전도로: 체력이 떨어질수록 박동이 빨라지고 색이 변한다 */
+const ecg = { phase: 0 };
+function ecgWave(p) {
+  if (p < .1) return 0;
+  if (p < .17) return .12 * Math.sin((p - .1) / .07 * Math.PI);
+  if (p < .24) return 0;
+  if (p < .27) return -.14 * (p - .24) / .03;
+  if (p < .31) return -.14 + (p - .27) / .04 * 1.14;
+  if (p < .35) return 1 - (p - .31) / .04 * 1.3;
+  if (p < .39) return -.3 + (p - .35) / .04 * .3;
+  if (p < .5) return 0;
+  if (p < .64) return .22 * Math.sin((p - .5) / .14 * Math.PI);
+  return 0;
+}
+function updateEcg(dt, frac) {
+  const cvs = el.ecg, g = cvs.getContext('2d'), w = cvs.width, h = cvs.height;
+  const state = frac > .6 ? 0 : frac > .3 ? 1 : 2, col = [[66, 224, 111], [245, 180, 0], [255, 74, 74]][state];
+  if (hc.hs !== state) { hc.hs = state; el.hpState.textContent = ['양호', '주의', '위험'][state]; el.hpState.className = ['', 'caution', 'danger'][state]; el.hp.style.background = rgbs(col); }
+  ecg.phase += dt * (1.1 + (1 - frac) * 1.5);
+  g.clearRect(0, 0, w, h);
+  g.strokeStyle = 'rgba(255,255,255,.06)'; g.lineWidth = 1; g.beginPath();
+  for (let x = 0; x < w; x += 24) { g.moveTo(x, 0); g.lineTo(x, h); }
+  for (let y = 0; y < h; y += 21) { g.moveTo(0, y); g.lineTo(w, y); }
+  g.stroke();
+  const lg = g.createLinearGradient(0, 0, w, 0);
+  lg.addColorStop(0, rgba(col, 0)); lg.addColorStop(.5, rgba(col, .7)); lg.addColorStop(1, rgba(col, 1));
+  g.strokeStyle = lg; g.lineWidth = 3; g.lineJoin = 'round'; g.shadowColor = rgbs(col); g.shadowBlur = 8;
+  g.beginPath();
+  for (let x = 0; x <= w; x += 3) {
+    const p = (((ecg.phase - (w - x) / w * 2.2) % 1) + 1) % 1, y = h * .66 - (P.hp > 0 ? ecgWave(p) : 0) * h * .52;
+    x ? g.lineTo(x, y) : g.moveTo(x, y);
+  }
+  g.stroke(); g.shadowBlur = 0;
+}
 /* 환자 상태 모니터: 게임 상태에서 계산한 체온 · 바이러스 부하 · 항체가 */
 const vit = { t: 99, hist: [], hist2: [], k0: 0 };
 function updateVitals(dt) {
@@ -2520,10 +2726,10 @@ function updateVitals(dt) {
   el.vTiter.className = 'ok'; el.vTiter.textContent = `1:${fmtNum(titer)}`;
   const cvs = el.vSpark, g = cvs.getContext('2d'), w2 = cvs.width, h2 = cvs.height;
   g.clearRect(0, 0, w2, h2);
-  g.strokeStyle = 'rgba(14,18,24,.1)'; g.lineWidth = 1;
+  g.strokeStyle = 'rgba(255,255,255,.1)'; g.lineWidth = 1;
   for (let i = 1; i < 3; i++) { g.beginPath(); g.moveTo(0, h2 * i / 3); g.lineTo(w2, h2 * i / 3); g.stroke(); }
   const line = (arr, col) => { g.strokeStyle = col; g.lineWidth = 2; g.beginPath(); arr.forEach((v, i) => { const x = i / 59 * w2, y = h2 - 4 - v * (h2 - 8); i ? g.lineTo(x, y) : g.moveTo(x, y); }); g.stroke(); };
-  line(vit.hist2, '#1fa35a'); line(vit.hist, '#f08a00');
+  line(vit.hist2, '#42e06f'); line(vit.hist, '#f5b400');
 }
 function updateHud(dt) {
   const hp = clamp(P.hp / P.maxHp, 0, 1);
@@ -2532,6 +2738,7 @@ function updateHud(dt) {
   const gh = Math.round(ghostHp * 200) / 200;
   if (hc.gh !== gh) { hc.gh = gh; el.ghost.style.transform = `scaleX(${gh})`; }
   setTxt(el.hptxt, 'hpt', `${Math.max(0, Math.ceil(P.hp))} / ${P.maxHp}`);
+  updateEcg(dt, hp);
   const xp = Math.round(clamp(P.xp / P.xpNeed, 0, 1) * 500) / 500;
   if (hc.xp !== xp) { hc.xp = xp; el.xp.style.transform = `scaleX(${xp})`; }
   setTxt(el.lv, 'lv', P.lv);
@@ -2580,8 +2787,8 @@ function renderMenu() {
     <h2>${c.ko}<small>${c.en.toUpperCase()} · ${c.role}</small></h2>
     <p>${c.blurb}</p>
     <div class="stats">
-      <span>체력</span><div class="bar"><i style="width:${Math.round(c.hp / 150 * 100)}%;--bc:#ff5a78"></i></div>
-      <span>속도</span><div class="bar"><i style="width:${Math.round(c.spd / 145 * 100)}%;--bc:#2f6fed"></i></div>
+      <span>체력</span><div class="bar"><i style="width:${Math.round(c.hp / 150 * 100)}%;--bc:#ff6b8a"></i></div>
+      <span>속도</span><div class="bar"><i style="width:${Math.round(c.spd / 145 * 100)}%;--bc:#7fe8ff"></i></div>
     </div>
     <div class="tags"><span class="tag">시작 · ${w.ko}</span><span class="tag" style="--c:#0e1218">${c.trait}</span></div>`;
   const b = save.best;
@@ -2794,8 +3001,27 @@ function frame(now) {
    시작
    ============================================================ */
 loadSave();
+/* 선택: 같은 폴더의 assets/ 이미지가 있으면 내장 그래픽 대신 사용한다 (없으면 무시)
+   assets/enemy_<종류>.png  병원체·변종 (투명 PNG, 오른쪽을 보는 정면 이미지)
+   assets/cell_macro|nk|tcell|bcell.png  면역세포 (투명 PNG, 정사각형)
+   assets/bg_0|1|2.jpg  구역 배경 (이음새 없는 타일)   assets/logo.png  타이틀 로고 */
+function loadAssetOverrides() {
+  const tryLoad = (url, ok) => { const im = new Image(); im.onload = () => { try { ok(im); } catch (e) { /* 무시 */ } }; im.onerror = () => {}; im.src = url; };
+  Object.keys(VIRUS).concat(Object.keys(BOSS)).forEach(k => tryLoad('assets/enemy_' + k + '.png', im => {
+    const def = VIRUS[k] || BOSS[k], e = EXT[def.draw], q = BOSS[k] ? 1.12 : 1, w = def.r * 2 * e[0] * q, h = def.r * 2 * e[1] * q;
+    const c = mkCanvas(w * SS, h * SS); c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+    const s = { c, w, h }; SPR[k] = s; SPRW[k] = silhouette(s, '#fff'); SPRM[k] = silhouette(s, '#c25cff'); SPRD[k] = silhouette(s, '#33414f');
+    Object.keys(BLUR).forEach(id => delete BLUR[id]);
+  }));
+  CHAR_ORDER.forEach(id => tryLoad('assets/cell_' + id + '.png', im => { CELL_IMG[CHARS[id].look] = im; }));
+  [0, 1, 2].forEach(z => tryLoad('assets/bg_' + z + '.jpg', im => { const c = mkCanvas(1024, 1024); c.getContext('2d').drawImage(im, 0, 0, 1024, 1024); BGS[z].far = c; BGS[z].F = 1024; }));
+  tryLoad('assets/logo.png', im => { const b = document.querySelector('.tt-brand'); if (b) { im.alt = 'IMMUNE ZERO'; im.style.cssText = 'width:min(420px,100%);height:auto;display:block'; b.innerHTML = ''; b.appendChild(im); } });
+}
 addEventListener('resize', () => { resize(); layoutStage(); });
 resize();
+initAtmos();
+initTitle();
+loadAssetOverrides();
 renderMenu();
 setMode('menu');
 layoutStage();
